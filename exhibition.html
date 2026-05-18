@@ -56,9 +56,12 @@
     .past-title { font-family: var(--sans-logo); font-size: 16px; font-weight: 300; letter-spacing: 0.05em; color: var(--text-dark); margin-bottom: 0.3rem; }
     .past-meta { font-size: 11px; letter-spacing: 0.12em; color: var(--text-light); line-height: 1.8; }
 
-    footer { border-top: 0.5px solid var(--light); padding: 2rem 3rem; display: flex; justify-content: space-between; align-items: center; margin-top: 2rem; }
-    .footer-logo { font-family: var(--sans-logo); font-size: 13px; font-weight: 300; letter-spacing: 0.2em; color: var(--text-light); }
-    .footer-copy { font-size: 10px; letter-spacing: 0.14em; color: var(--text-light); }
+    footer { border-top: 0.5px solid var(--light); padding: 1.8rem 3rem 1.4rem; margin-top: 2rem; }
+    .footer-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+    .footer-links { display: flex; gap: 2.5rem; }
+    .footer-links a { font-size: 10px; letter-spacing: 0.2em; color: var(--text-light); text-decoration: none; transition: color 0.3s; }
+    .footer-links a:hover { color: var(--text-dark); }
+    .footer-copy { font-size: 10px; letter-spacing: 0.14em; color: var(--text-light); text-align: center; border-top: 0.5px solid var(--light); padding-top: 1rem; }
 
     @media (max-width: 768px) {
       nav { padding: 1.4rem 1.5rem; }
@@ -111,42 +114,8 @@
     </a>
   </div>
 
-  <!-- 지난 전시 -->
-  <div class="section-block">
-    <div class="section-heading">PAST EXHIBITIONS</div>
-    <div class="past-grid">
+  <!-- 지난 전시: 정보 준비되면 추가 -->
 
-      <!-- 지난 전시 카드 — 복사해서 추가 -->
-      <a class="past-card" href="exhibition-b.html">
-        <div class="past-img">
-          <!-- <img src="images/exhibition-b.jpg" alt="전시명"> -->
-          IMAGE
-        </div>
-        <div class="past-title">전시 제목 B</div>
-        <div class="past-meta">작가명<br>0000. 00. 00 — 0000. 00. 00</div>
-      </a>
-
-      <a class="past-card" href="exhibition-c.html">
-        <div class="past-img">
-          <!-- <img src="images/exhibition-c.jpg" alt="전시명"> -->
-          IMAGE
-        </div>
-        <div class="past-title">전시 제목 C</div>
-        <div class="past-meta">작가명<br>0000. 00. 00 — 0000. 00. 00</div>
-      </a>
-
-      <a class="past-card" href="exhibition-d.html">
-        <div class="past-img">
-          <!-- <img src="images/exhibition-d.jpg" alt="전시명"> -->
-          IMAGE
-        </div>
-        <div class="past-title">전시 제목 D</div>
-        <div class="past-meta">작가명<br>0000. 00. 00 — 0000. 00. 00</div>
-      </a>
-
-    </div>
-  </div>
-</main>
 <footer>
   <div class="footer-top">
     <div><img src="logo-small.png" alt="Gallery Mirar" style="height:20px; width:auto; opacity:0.4;"></div>
