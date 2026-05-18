@@ -15,7 +15,7 @@
     }
     body { font-family: 'DM Sans', sans-serif; background: var(--white); color: var(--text-dark); -webkit-font-smoothing: antialiased; }
     nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; padding: 1.6rem 3rem; background: rgba(255,255,255,0.95); backdrop-filter: blur(8px); border-bottom: 0.5px solid var(--light); }
-    .logo { font-family: var(--sans-logo); font-weight: 300; font-size: 16px; letter-spacing: 0.22em; color: var(--text-dark); text-decoration: none; }
+    .logo { text-decoration: none; }
     .nav-links { display: flex; gap: 2.5rem; list-style: none; }
     .nav-links a { font-size: 10px; letter-spacing: 0.2em; color: var(--text); text-decoration: none; transition: color 0.3s; }
     .nav-links a:hover, .nav-links a.active { color: var(--text-dark); }
@@ -24,45 +24,33 @@
     main { padding-top: 80px; }
     .page-header { padding: 4rem 3rem 2rem; border-bottom: 0.5px solid var(--light); }
     .page-label { font-size: 10px; letter-spacing: 0.25em; color: var(--text-light); margin-bottom: 1rem; }
-    .page-title { font-family: var(--sans-logo); font-weight: 300; font-size: clamp(28px, 4vw, 44px); letter-spacing: 0.08em; color: var(--text-dark); }
-
-    /* 섹션 구분 */
+    .page-title { font-weight: 300; font-size: clamp(28px, 4vw, 44px); letter-spacing: 0.08em; color: var(--text-dark); }
     .section-block { padding: 3.5rem 3rem; }
     .section-block + .section-block { border-top: 0.5px solid var(--light); }
     .section-heading { font-size: 10px; letter-spacing: 0.25em; color: var(--text-light); margin-bottom: 2.5rem; }
-
-    /* 현재 전시 — 크게 */
-    .current-card {
-      display: grid; grid-template-columns: 1fr 1fr; gap: 3.5rem;
-      align-items: center; text-decoration: none;
-    }
-    .current-img { background: var(--off-white); border: 0.5px solid var(--light); aspect-ratio: 4/3; display: flex; align-items: center; justify-content: center; color: var(--mid); font-size: 11px; letter-spacing: 0.12em; overflow: hidden; }
-    .current-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; }
+    .current-card { display: grid; grid-template-columns: 1fr 1fr; gap: 3.5rem; align-items: center; text-decoration: none; }
+    .current-img { overflow: hidden; border: 0.5px solid var(--light); aspect-ratio: 4/3; }
+    .current-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; display: block; }
     .current-card:hover .current-img img { transform: scale(1.03); }
     .current-tag { font-size: 10px; letter-spacing: 0.2em; color: var(--text-light); margin-bottom: 1rem; }
-    .current-title { font-family: var(--sans-logo); font-size: 28px; font-weight: 300; letter-spacing: 0.06em; color: var(--text-dark); margin-bottom: 0.6rem; line-height: 1.4; }
+    .current-title { font-weight: 300; font-size: 28px; letter-spacing: 0.04em; color: var(--text-dark); margin-bottom: 0.6rem; line-height: 1.4; }
     .current-meta { font-size: 11px; letter-spacing: 0.15em; color: var(--text-light); line-height: 2.2; margin-bottom: 1.2rem; }
-    .current-desc { font-size: 14px; line-height: 2.4; color: var(--text); font-weight: 300; }
     .more-link { display: inline-flex; align-items: center; gap: 0.5rem; font-size: 10px; letter-spacing: 0.2em; color: var(--text-light); margin-top: 1.5rem; transition: color 0.3s; }
     .more-link::after { content: '→'; }
     .current-card:hover .more-link { color: var(--text-dark); }
-
-    /* 지난 전시 — 3열 작은 카드 */
     .past-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.8rem; }
     .past-card { text-decoration: none; display: block; }
-    .past-img { background: var(--off-white); border: 0.5px solid var(--light); aspect-ratio: 4/3; display: flex; align-items: center; justify-content: center; color: var(--mid); font-size: 11px; letter-spacing: 0.1em; overflow: hidden; margin-bottom: 1rem; }
+    .past-img { border: 0.5px solid var(--light); aspect-ratio: 4/3; display: flex; align-items: center; justify-content: center; color: var(--mid); font-size: 11px; letter-spacing: 0.1em; overflow: hidden; margin-bottom: 1rem; background: var(--off-white); }
     .past-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
     .past-card:hover .past-img img { transform: scale(1.04); }
-    .past-title { font-family: var(--sans-logo); font-size: 16px; font-weight: 300; letter-spacing: 0.05em; color: var(--text-dark); margin-bottom: 0.3rem; }
+    .past-title { font-weight: 300; font-size: 16px; letter-spacing: 0.05em; color: var(--text-dark); margin-bottom: 0.3rem; }
     .past-meta { font-size: 11px; letter-spacing: 0.12em; color: var(--text-light); line-height: 1.8; }
-
     footer { border-top: 0.5px solid var(--light); padding: 1.8rem 3rem 1.4rem; margin-top: 2rem; }
     .footer-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
     .footer-links { display: flex; gap: 2.5rem; }
     .footer-links a { font-size: 10px; letter-spacing: 0.2em; color: var(--text-light); text-decoration: none; transition: color 0.3s; }
     .footer-links a:hover { color: var(--text-dark); }
     .footer-copy { font-size: 10px; letter-spacing: 0.14em; color: var(--text-light); text-align: center; border-top: 0.5px solid var(--light); padding-top: 1rem; }
-
     @media (max-width: 768px) {
       nav { padding: 1.4rem 1.5rem; }
       .nav-links { display: none; }
@@ -87,6 +75,7 @@
   </ul>
   <button class="hamburger" id="hamburger" aria-label="메뉴"><span></span><span></span><span></span></button>
 </nav>
+
 <main>
   <div class="page-header">
     <div class="page-label">EXHIBITION</div>
@@ -96,62 +85,36 @@
   <!-- 현재 전시 -->
   <div class="section-block">
     <div class="section-heading">CURRENT EXHIBITION</div>
-    <a class="current-card" href="exhibition-a.html">
+    <a class="current-card" href="exhibition-sonsumin.html">
       <div class="current-img">
-        <!-- <img src="images/exhibition-a.jpg" alt="전시명"> -->
-        EXHIBITION IMAGE
+        <img src="exhibition-sonsumin-2.jpg" alt="Text to Energy">
       </div>
       <div>
         <div class="current-tag">NOW ON VIEW</div>
-        <div class="current-title">전시 제목 A</div>
+        <div class="current-title">Text to Energy</div>
         <div class="current-meta">
-          작가명<br>
-          0000. 00. 00 — 0000. 00. 00
+          손수민<br>
+          2026. 05. 01 — 05. 25
         </div>
-        <div class="current-desc">전시 소개 한두 줄 텍스트를 여기에 입력하세요.</div>
         <div class="more-link">VIEW MORE</div>
       </div>
     </a>
   </div>
 
-  <!-- 지난 전시: 정보 준비되면 추가 -->
-
   <!-- 지난 전시 -->
   <div class="section-block">
     <div class="section-heading">PAST EXHIBITIONS</div>
     <div class="past-grid">
-
       <!-- 지난 전시 카드 — 복사해서 추가 -->
-      <a class="past-card" href="exhibition-b.html">
-        <div class="past-img">
-          <!-- <img src="images/exhibition-b.jpg" alt="전시명"> -->
-          IMAGE
-        </div>
-        <div class="past-title">전시 제목 B</div>
+      <a class="past-card" href="#">
+        <div class="past-img">IMAGE</div>
+        <div class="past-title">전시 제목</div>
         <div class="past-meta">작가명<br>0000. 00. 00 — 0000. 00. 00</div>
       </a>
-
-      <a class="past-card" href="exhibition-c.html">
-        <div class="past-img">
-          <!-- <img src="images/exhibition-c.jpg" alt="전시명"> -->
-          IMAGE
-        </div>
-        <div class="past-title">전시 제목 C</div>
-        <div class="past-meta">작가명<br>0000. 00. 00 — 0000. 00. 00</div>
-      </a>
-
-      <a class="past-card" href="exhibition-d.html">
-        <div class="past-img">
-          <!-- <img src="images/exhibition-d.jpg" alt="전시명"> -->
-          IMAGE
-        </div>
-        <div class="past-title">전시 제목 D</div>
-        <div class="past-meta">작가명<br>0000. 00. 00 — 0000. 00. 00</div>
-      </a>
-
     </div>
   </div>
 </main>
+
 <footer>
   <div class="footer-top">
     <div><img src="logo-small.png" alt="Gallery Mirar" style="height:20px; width:auto; opacity:0.4;"></div>
@@ -163,6 +126,7 @@
   </div>
   <div class="footer-copy">© 2020 Gallery Mirar. All rights reserved.</div>
 </footer>
+
 <script>
   const hamburger = document.getElementById('hamburger');
   const navLinks = document.getElementById('navLinks');
