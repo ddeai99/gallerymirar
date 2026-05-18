@@ -38,7 +38,13 @@
     .more-link { display: inline-flex; align-items: center; gap: 0.5rem; font-size: 10px; letter-spacing: 0.2em; color: var(--text-light); margin-top: 1.5rem; transition: color 0.3s; }
     .more-link::after { content: '→'; }
     .current-card:hover .more-link { color: var(--text-dark); }
-    .past-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.8rem; }
+    .year-tabs { display: flex; gap: 0; padding: 0 3rem; border-bottom: 0.5px solid var(--light); }
+    .year-tab { font-size: 10px; letter-spacing: 0.18em; color: var(--text-light); cursor: pointer; padding: 1rem 1.2rem; border: none; background: none; transition: color 0.3s; position: relative; }
+    .year-tab:hover { color: var(--text); }
+    .year-tab.active { color: var(--text-dark); }
+    .year-tab.active::after { content: ''; position: absolute; bottom: -0.5px; left: 0; right: 0; height: 1px; background: var(--text-dark); }
+    .past-year { display: none; }
+    .past-year.active { display: block; }
     .past-card { text-decoration: none; display: block; }
     .past-img { border: 0.5px solid var(--light); aspect-ratio: 1; background: #fff; display: flex; align-items: center; justify-content: center; overflow: hidden; margin-bottom: 1rem; }
     .past-img img { max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; transition: transform 0.5s ease; display: block; }
@@ -104,28 +110,41 @@
   <!-- 지난 전시 -->
   <div class="section-block">
     <div class="section-heading">PAST EXHIBITIONS</div>
-    <div class="past-grid">
-      <a class="past-card" href="exhibition-onram.html">
-        <div class="past-img">
-          <img src="exhibition-onram-poster.jpg" alt="황금호박 빛이 머무는 자리">
-        </div>
-        <div class="past-title">황금호박 빛이 머무는 자리</div>
-        <div class="past-meta">온람<br>2025. 05. 07 — 05. 20</div>
-      </a>
-      <a class="past-card" href="exhibition-hwang.html">
-        <div class="past-img">
-          <img src="exhibition-hwang-poster.jpg" alt="낯익고도 낯선 파라다이스">
-        </div>
-        <div class="past-title">낯익고도 낯선 파라다이스</div>
-        <div class="past-meta">황다연<br>2025. 04. 08 — 04. 20</div>
-      </a>
-      <a class="past-card" href="exhibition-kim.html">
-        <div class="past-img">
-          <img src="exhibition-kim-poster.jpg" alt="No Reason">
-        </div>
-        <div class="past-title">No Reason</div>
-        <div class="past-meta">김인<br>2025. 03. 04 — 03. 17</div>
-      </a>
+    <div class="year-tabs">
+      <button class="year-tab active" onclick="showYear('2026')">2026</button>
+      <button class="year-tab" onclick="showYear('2025')">2025</button>
+    </div>
+
+    <div class="past-year active" id="year-2026" style="padding-top: 2.5rem;">
+      <div class="past-grid">
+        <!-- 2026 지난 전시 추가 예정 -->
+      </div>
+    </div>
+
+    <div class="past-year" id="year-2025" style="padding-top: 2.5rem;">
+      <div class="past-grid">
+        <a class="past-card" href="exhibition-onram.html">
+          <div class="past-img">
+            <img src="exhibition-onram-poster.jpg" alt="황금호박 빛이 머무는 자리">
+          </div>
+          <div class="past-title">황금호박 빛이 머무는 자리</div>
+          <div class="past-meta">온람<br>2025. 05. 07 — 05. 20</div>
+        </a>
+        <a class="past-card" href="exhibition-hwang.html">
+          <div class="past-img">
+            <img src="exhibition-hwang-poster.jpg" alt="낯익고도 낯선 파라다이스">
+          </div>
+          <div class="past-title">낯익고도 낯선 파라다이스</div>
+          <div class="past-meta">황다연<br>2025. 04. 08 — 04. 20</div>
+        </a>
+        <a class="past-card" href="exhibition-kim.html">
+          <div class="past-img">
+            <img src="exhibition-kim-poster.jpg" alt="No Reason">
+          </div>
+          <div class="past-title">No Reason</div>
+          <div class="past-meta">김인<br>2025. 03. 04 — 03. 17</div>
+        </a>
+      </div>
     </div>
   </div>
 </main>
@@ -146,6 +165,13 @@
   const hamburger = document.getElementById('hamburger');
   const navLinks = document.getElementById('navLinks');
   hamburger.addEventListener('click', () => navLinks.classList.toggle('open'));
+
+  function showYear(year) {
+    document.querySelectorAll('.past-year').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.year-tab').forEach(el => el.classList.remove('active'));
+    document.getElementById('year-' + year).classList.add('active');
+    event.target.classList.add('active');
+  }
 </script>
 </body>
 </html>
