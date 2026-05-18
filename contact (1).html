@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact — Gallery Mirar</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --white: #ffffff; --off-white: #f8f7f5; --light: #eeece8;
+      --mid: #c8c4bc; --text-light: #999690; --text: #4a4845; --text-dark: #1e1d1b;
+      --sans-logo: 'DM Sans', sans-serif;
+    }
+    body { font-family: 'DM Sans', sans-serif; background: var(--white); color: var(--text-dark); -webkit-font-smoothing: antialiased; }
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 1.6rem 3rem; background: rgba(255,255,255,0.95); backdrop-filter: blur(8px);
+      border-bottom: 0.5px solid var(--light);
+    }
+    .logo { font-family: var(--sans-logo); font-weight: 300; font-size: 16px; letter-spacing: 0.22em; color: var(--text-dark); text-decoration: none; }
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+    .nav-links a { font-size: 10px; letter-spacing: 0.2em; color: var(--text); text-decoration: none; transition: color 0.3s; }
+    .nav-links a:hover, .nav-links a.active { color: var(--text-dark); }
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; }
+    .hamburger span { display: block; width: 22px; height: 0.5px; background: var(--text-dark); }
+    main { padding-top: 80px; }
+    .page-header { padding: 4rem 3rem 2rem; border-bottom: 0.5px solid var(--light); }
+    .page-label { font-size: 10px; letter-spacing: 0.25em; color: var(--text-light); margin-bottom: 1rem; }
+    .page-title { font-family: var(--sans-logo); font-weight: 300; font-size: clamp(28px, 4vw, 44px); letter-spacing: 0.08em; color: var(--text-dark); }
+    .content { padding: 4rem 3rem; display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: start; }
+    .contact-block { margin-bottom: 2.5rem; }
+    .contact-key { font-size: 10px; letter-spacing: 0.22em; color: var(--text-light); margin-bottom: 0.8rem; }
+    .contact-val { font-size: 14px; color: var(--text); line-height: 2.2; font-weight: 300; }
+    .contact-val a { color: var(--text); text-decoration: none; transition: color 0.3s; }
+    .contact-val a:hover { color: var(--text-dark); }
+    .map-wrap { margin-top: 1rem; border: 0.5px solid var(--light); height: 260px; overflow: hidden; position: relative; background: var(--off-white); }
+    .map-link { display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; text-decoration: none; color: var(--text-light); font-size: 11px; letter-spacing: 0.15em; transition: background 0.3s; }
+    .map-link:hover { background: var(--light); }
+    .channel-links { display: flex; flex-direction: column; gap: 1.2rem; margin-top: 0.5rem; }
+    .channel-link { font-size: 11px; letter-spacing: 0.18em; color: var(--text); text-decoration: none; transition: color 0.3s; }
+    .channel-link:hover { color: var(--text-dark); }
+    footer { border-top: 0.5px solid var(--light); padding: 1.8rem 3rem 1.4rem; }
+    .footer-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+    .footer-links { display: flex; gap: 2.5rem; }
+    .footer-links a { font-size: 10px; letter-spacing: 0.2em; color: var(--text-light); text-decoration: none; transition: color 0.3s; }
+    .footer-links a:hover { color: var(--text-dark); }
+    .footer-copy { font-size: 10px; letter-spacing: 0.14em; color: var(--text-light); text-align: center; border-top: 0.5px solid var(--light); padding-top: 1rem; }
+    @media (max-width: 768px) {
+      nav { padding: 1.4rem 1.5rem; }
+      .nav-links { display: none; }
+      .nav-links.open { display: flex; flex-direction: column; position: fixed; top: 60px; left: 0; right: 0; background: var(--white); padding: 2rem 1.5rem; border-bottom: 0.5px solid var(--light); gap: 1.8rem; z-index: 99; }
+      .hamburger { display: flex; }
+      .page-header { padding: 3rem 1.5rem 2rem; }
+      .content { grid-template-columns: 1fr; gap: 0; padding: 3rem 1.5rem; }
+      footer { flex-direction: column; gap: 0.8rem; text-align: center; padding: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="logo"><img src="logo-small.png" alt="Gallery Mirar" style="height:42px; width:auto; display:block;"></a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="about.html">ABOUT</a></li>
+    <li><a href="exhibition.html">EXHIBITION</a></li>
+    <li><a href="artists.html">ARTISTS</a></li>
+    <li><a href="contact.html" class="active">CONTACT</a></li>
+  </ul>
+  <button class="hamburger" id="hamburger" aria-label="메뉴"><span></span><span></span><span></span></button>
+</nav>
+<main>
+  <div class="page-header">
+    <div class="page-label">CONTACT</div>
+    <div class="page-title">Visit & Inquiry</div>
+  </div>
+  <div class="content">
+    <div>
+      <div class="contact-block">
+        <div class="contact-key">LOCATION</div>
+        <div class="contact-val">수원시 팔달구 수원천로 255번길 6, 2층 2208호</div>
+      </div>
+      <div class="contact-block">
+        <div class="contact-key">HOURS</div>
+        <div class="contact-val">
+          10:00 — 19:00 (예약제)<br>
+          <span style="font-size:12px; color: var(--text-light);">※ 방문 전 사전 예약 필수</span>
+        </div>
+      </div>
+      <div class="contact-block">
+        <div class="contact-key">INQUIRY</div>
+        <div class="contact-val">
+          <a href="tel:01029284578">010.2928.4578</a><br>
+          <a href="mailto:gallerymirar@naver.com">gallerymirar@naver.com</a>
+        </div>
+      </div>
+      <div class="map-wrap">
+        <a class="map-link" href="https://naver.me/FcmwivXH" target="_blank">
+          NAVER MAP으로 보기 →
+        </a>
+      </div>
+    </div>
+    <div>
+      <div class="contact-block">
+        <div class="contact-key">CHANNELS</div>
+        <div class="channel-links">
+          <a class="channel-link" href="https://instagram.com/gallerymirar" target="_blank">INSTAGRAM</a>
+          <a class="channel-link" href="https://blog.naver.com/gallerymirar" target="_blank">NAVER BLOG</a>
+          <a class="channel-link" href="https://smartstore.naver.com/gallerymirar" target="_blank">SMARTSTORE</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+<footer>
+  <div class="footer-top">
+    <div><img src="logo-small.png" alt="Gallery Mirar" style="height:20px; width:auto; opacity:0.4;"></div>
+    <div class="footer-links">
+      <a href="https://instagram.com/gallerymirar" target="_blank">Instagram</a>
+      <a href="https://blog.naver.com/gallerymirar" target="_blank">Blog</a>
+      <a href="https://smartstore.naver.com/gallerymirar" target="_blank">Smartstore</a>
+    </div>
+  </div>
+  <div class="footer-copy">© 2020 Gallery Mirar. All rights reserved.</div>
+</footer>
+<script>
+  const hamburger = document.getElementById('hamburger');
+  const navLinks = document.getElementById('navLinks');
+  hamburger.addEventListener('click', () => navLinks.classList.toggle('open'));
+</script>
+</body>
+</html>
