@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About — Gallery Mirare</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --white: #ffffff; --off-white: #f8f7f5; --light: #eeece8;
+      --mid: #c8c4bc; --text-light: #999690; --text: #4a4845; --text-dark: #1e1d1b;
+      --sans-logo: 'DM Sans', sans-serif;
+    }
+    body { font-family: 'DM Sans', sans-serif; background: var(--white); color: var(--text-dark); -webkit-font-smoothing: antialiased; }
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 1.6rem 3rem; background: rgba(255,255,255,0.95); backdrop-filter: blur(8px);
+      border-bottom: 0.5px solid var(--light);
+    }
+    .logo { font-family: var(--sans-logo); font-weight: 300; font-size: 16px; letter-spacing: 0.22em; color: var(--text-dark); text-decoration: none; }
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+    .nav-links a { font-size: 10px; letter-spacing: 0.2em; color: var(--text); text-decoration: none; transition: color 0.3s; }
+    .nav-links a:hover, .nav-links a.active { color: var(--text-dark); }
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; }
+    .hamburger span { display: block; width: 22px; height: 0.5px; background: var(--text-dark); }
+    main { padding-top: 80px; }
+    .page-header { padding: 4rem 3rem 2rem; border-bottom: 0.5px solid var(--light); }
+    .page-label { font-size: 10px; letter-spacing: 0.25em; color: var(--text-light); margin-bottom: 1rem; }
+    .page-title { font-family: var(--sans-logo); font-weight: 300; font-size: clamp(28px, 4vw, 44px); letter-spacing: 0.08em; color: var(--text-dark); }
+    .content { padding: 4rem 3rem; display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: start; }
+    .about-image { background: var(--off-white); border: 0.5px solid var(--light); aspect-ratio: 3/4; display: flex; align-items: center; justify-content: center; color: var(--mid); font-size: 11px; letter-spacing: 0.12em; }
+    .about-image img { width: 100%; height: 100%; object-fit: cover; }
+    .about-text p { font-family: var(--sans-logo); font-weight: 300; font-size: 16px; line-height: 2.6; color: var(--text); letter-spacing: 0.04em; }
+    .about-text p + p { margin-top: 2rem; }
+    footer { border-top: 0.5px solid var(--light); padding: 2rem 3rem; display: flex; justify-content: space-between; align-items: center; }
+    .footer-logo { font-family: var(--sans-logo); font-size: 13px; font-weight: 300; letter-spacing: 0.2em; color: var(--text-light); }
+    .footer-copy { font-size: 10px; letter-spacing: 0.14em; color: var(--text-light); }
+    @media (max-width: 768px) {
+      nav { padding: 1.4rem 1.5rem; }
+      .nav-links { display: none; }
+      .nav-links.open { display: flex; flex-direction: column; position: fixed; top: 60px; left: 0; right: 0; background: var(--white); padding: 2rem 1.5rem; border-bottom: 0.5px solid var(--light); gap: 1.8rem; z-index: 99; }
+      .hamburger { display: flex; }
+      .page-header { padding: 3rem 1.5rem 2rem; }
+      .content { grid-template-columns: 1fr; gap: 2.5rem; padding: 3rem 1.5rem; }
+      footer { flex-direction: column; gap: 0.8rem; text-align: center; padding: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="logo"><img src="logo-small.png" alt="Gallery Mirar" style="height:32px; width:auto; display:block;"></a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="about.html" class="active">ABOUT</a></li>
+    <li><a href="exhibition.html">EXHIBITION</a></li>
+    <li><a href="artists.html">ARTISTS</a></li>
+    <li><a href="contact.html">CONTACT</a></li>
+  </ul>
+  <button class="hamburger" id="hamburger" aria-label="메뉴"><span></span><span></span><span></span></button>
+</nav>
+<main>
+  <div class="page-header">
+    <div class="page-label">ABOUT</div>
+    <div class="page-title">Gallery Mirare</div>
+  </div>
+  <div class="content">
+    <div class="about-image">
+      <!-- <img src="images/about.jpg" alt="Gallery Mirare"> -->
+      GALLERY IMAGE
+    </div>
+    <div class="about-text">
+      <p>갤러리 미라르는 감각 중심의 현대회화를 큐레이션합니다.</p>
+      <p>감정, 기억, 반복, 공존, 공간—현실과 비현실 사이의 장면들을 각자의 언어로 다루는 작가들과 함께합니다.</p>
+      <p>작품을 통해 일상의 감각이 조용히 전환되는 경험을 전합니다.</p>
+    </div>
+  </div>
+</main>
+<footer>
+  <div class="footer-logo"><img src="logo-small.png" alt="Gallery Mirar" style="height:22px; width:auto; opacity:0.5;"></div>
+  <div class="footer-copy">© 2025 Gallery Mirare. All rights reserved.</div>
+</footer>
+<script>
+  const hamburger = document.getElementById('hamburger');
+  const navLinks = document.getElementById('navLinks');
+  hamburger.addEventListener('click', () => navLinks.classList.toggle('open'));
+</script>
+</body>
+</html>

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>전시 A — Gallery Mirare</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --white: #ffffff; --off-white: #f8f7f5; --light: #eeece8;
+      --mid: #c8c4bc; --text-light: #999690; --text: #4a4845; --text-dark: #1e1d1b;
+      --sans-logo: 'DM Sans', sans-serif;
+    }
+    body { font-family: 'DM Sans', sans-serif; background: var(--white); color: var(--text-dark); -webkit-font-smoothing: antialiased; }
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; padding: 1.6rem 3rem; background: rgba(255,255,255,0.95); backdrop-filter: blur(8px); border-bottom: 0.5px solid var(--light); }
+    .logo { font-family: var(--sans-logo); font-weight: 300; font-size: 16px; letter-spacing: 0.22em; color: var(--text-dark); text-decoration: none; }
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+    .nav-links a { font-size: 10px; letter-spacing: 0.2em; color: var(--text); text-decoration: none; transition: color 0.3s; }
+    .nav-links a:hover, .nav-links a.active { color: var(--text-dark); }
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; }
+    .hamburger span { display: block; width: 22px; height: 0.5px; background: var(--text-dark); }
+    main { padding-top: 80px; }
+
+    .back-link { display: inline-flex; align-items: center; gap: 0.6rem; font-size: 10px; letter-spacing: 0.2em; color: var(--text-light); text-decoration: none; padding: 1.5rem 3rem; border-bottom: 0.5px solid var(--light); transition: color 0.3s; }
+    .back-link:hover { color: var(--text-dark); }
+    .back-link::before { content: '←'; font-size: 12px; }
+
+    .hero-image { width: 100%; height: 60vh; background: var(--off-white); display: flex; align-items: center; justify-content: center; color: var(--mid); font-size: 11px; letter-spacing: 0.15em; overflow: hidden; }
+    .hero-image img { width: 100%; height: 100%; object-fit: cover; }
+
+    .exhibit-header { padding: 3rem 3rem 2.5rem; border-bottom: 0.5px solid var(--light); display: grid; grid-template-columns: 1fr auto; align-items: end; gap: 2rem; }
+    .exhibit-title { font-family: var(--sans-logo); font-weight: 300; font-size: clamp(24px, 3.5vw, 38px); letter-spacing: 0.06em; color: var(--text-dark); margin-bottom: 0.5rem; }
+    .exhibit-meta { font-size: 11px; letter-spacing: 0.18em; color: var(--text-light); line-height: 2.2; }
+    .exhibit-tag { font-size: 10px; letter-spacing: 0.2em; color: var(--text-light); padding: 0.4rem 0.8rem; border: 0.5px solid var(--light); display: inline-block; }
+
+    .exhibit-body { padding: 3.5rem 3rem; max-width: 680px; }
+    .exhibit-body p { font-family: var(--sans-logo); font-weight: 300; font-size: 16px; line-height: 2.6; color: var(--text); letter-spacing: 0.04em; }
+    .exhibit-body p + p { margin-top: 1.5rem; }
+
+    .gallery-section { padding: 0 3rem 4rem; }
+    .gallery-label { font-size: 10px; letter-spacing: 0.25em; color: var(--text-light); margin-bottom: 2rem; padding-top: 1rem; border-top: 0.5px solid var(--light); }
+    .gallery-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+    .gallery-grid .wide { grid-column: span 2; }
+    .gallery-item { background: var(--off-white); border: 0.5px solid var(--light); aspect-ratio: 4/3; display: flex; align-items: center; justify-content: center; color: var(--mid); font-size: 11px; letter-spacing: 0.08em; overflow: hidden; }
+    .gallery-item.wide { aspect-ratio: 16/7; }
+    .gallery-item img { width: 100%; height: 100%; object-fit: cover; }
+
+    footer { border-top: 0.5px solid var(--light); padding: 2rem 3rem; display: flex; justify-content: space-between; align-items: center; }
+    .footer-logo { font-family: var(--sans-logo); font-size: 13px; font-weight: 300; letter-spacing: 0.2em; color: var(--text-light); }
+    .footer-copy { font-size: 10px; letter-spacing: 0.14em; color: var(--text-light); }
+
+    @media (max-width: 768px) {
+      nav { padding: 1.4rem 1.5rem; }
+      .nav-links { display: none; }
+      .nav-links.open { display: flex; flex-direction: column; position: fixed; top: 60px; left: 0; right: 0; background: var(--white); padding: 2rem 1.5rem; border-bottom: 0.5px solid var(--light); gap: 1.8rem; z-index: 99; }
+      .hamburger { display: flex; }
+      .back-link { padding: 1.2rem 1.5rem; }
+      .exhibit-header { grid-template-columns: 1fr; padding: 2rem 1.5rem; }
+      .exhibit-body { padding: 2.5rem 1.5rem; }
+      .gallery-section { padding: 0 1.5rem 3rem; }
+      .gallery-grid { grid-template-columns: 1fr; }
+      .gallery-grid .wide { grid-column: span 1; }
+      .gallery-item.wide { aspect-ratio: 4/3; }
+      footer { flex-direction: column; gap: 0.8rem; text-align: center; padding: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="logo"><img src="logo-small.png" alt="Gallery Mirar" style="height:32px; width:auto; display:block;"></a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="about.html">ABOUT</a></li>
+    <li><a href="exhibition.html" class="active">EXHIBITION</a></li>
+    <li><a href="artists.html">ARTISTS</a></li>
+    <li><a href="contact.html">CONTACT</a></li>
+  </ul>
+  <button class="hamburger" id="hamburger" aria-label="메뉴"><span></span><span></span><span></span></button>
+</nav>
+<main>
+  <a href="exhibition.html" class="back-link">EXHIBITION</a>
+
+  <div class="hero-image">
+    <!-- <img src="images/exhibition-a-main.jpg" alt="전시명"> -->
+    EXHIBITION MAIN IMAGE
+  </div>
+
+  <div class="exhibit-header">
+    <div>
+      <div class="exhibit-title">전시 제목 A</div>
+      <div class="exhibit-meta">
+        작가명<br>
+        0000. 00. 00 — 0000. 00. 00
+      </div>
+    </div>
+    <div class="exhibit-tag">CURRENT</div>
+  </div>
+
+  <div class="exhibit-body">
+    <p>전시 소개 텍스트를 여기에 입력하세요. 전시의 주제, 작가의 작업 방향, 공간 구성 등을 자유롭게 서술합니다.</p>
+    <p>두 번째 단락입니다. 전시에 대한 추가적인 설명이나 맥락을 이어서 작성하세요.</p>
+  </div>
+
+  <div class="gallery-section">
+    <div class="gallery-label">INSTALLATION VIEWS</div>
+    <div class="gallery-grid">
+      <div class="gallery-item wide"><!-- <img src="images/install-a1.jpg" alt="설치 전경"> -->INSTALLATION VIEW</div>
+      <div class="gallery-item"><!-- <img src="images/install-a2.jpg" alt="작품"> -->WORK</div>
+      <div class="gallery-item"><!-- <img src="images/install-a3.jpg" alt="작품"> -->WORK</div>
+      <div class="gallery-item"><!-- <img src="images/install-a4.jpg" alt="디테일"> -->DETAIL</div>
+      <div class="gallery-item"><!-- <img src="images/install-a5.jpg" alt="디테일"> -->DETAIL</div>
+    </div>
+  </div>
+</main>
+<footer>
+  <div class="footer-logo"><img src="logo-small.png" alt="Gallery Mirar" style="height:22px; width:auto; opacity:0.5;"></div>
+  <div class="footer-copy">© 2025 Gallery Mirare. All rights reserved.</div>
+</footer>
+<script>
+  const hamburger = document.getElementById('hamburger');
+  const navLinks = document.getElementById('navLinks');
+  hamburger.addEventListener('click', () => navLinks.classList.toggle('open'));
+</script>
+</body>
+</html>
