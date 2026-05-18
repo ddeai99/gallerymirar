@@ -30,7 +30,7 @@
     .section-heading { font-size: 10px; letter-spacing: 0.25em; color: var(--text-light); margin-bottom: 2.5rem; }
     .current-card { display: grid; grid-template-columns: 1fr 1fr; gap: 3.5rem; align-items: center; text-decoration: none; }
     .current-img { aspect-ratio: 1; background: #fff; display: flex; align-items: center; justify-content: center; overflow: hidden; box-shadow: 0 8px 30px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.08); }
-    .current-img img { width: 100%; height: 100%; object-fit: cover; transform: scale(1.15); transition: transform 0.6s ease; display: block; }
+    .current-img img { max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; transition: transform 0.6s ease; display: block; }
     .current-card:hover .current-img img { transform: scale(1.03); }
     .current-tag { font-size: 10px; letter-spacing: 0.2em; color: var(--text-light); margin-bottom: 1rem; }
     .current-title { font-weight: 300; font-size: 28px; letter-spacing: 0.04em; color: var(--text-dark); margin-bottom: 0.6rem; line-height: 1.4; }
@@ -48,7 +48,7 @@
     .past-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.8rem; }
     .past-card { text-decoration: none; display: block; }
     .past-img { aspect-ratio: 1; background: #fff; display: flex; align-items: center; justify-content: center; overflow: hidden; margin-bottom: 1rem; box-shadow: 0 8px 30px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.08); }
-    .past-img img { width: 100%; height: 100%; object-fit: cover; transform: scale(1.15); transition: transform 0.5s ease; display: block; }
+    .past-img img { max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; transition: transform 0.5s ease; display: block; }
     .past-card:hover .past-img img { transform: scale(1.04); }
     .past-title { font-weight: 300; font-size: 16px; letter-spacing: 0.05em; color: var(--text-dark); margin-bottom: 0.3rem; text-align: center; }
     .past-meta { font-size: 11px; letter-spacing: 0.12em; color: var(--text-light); line-height: 1.8; text-align: center; }
