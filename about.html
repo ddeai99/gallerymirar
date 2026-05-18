@@ -30,11 +30,14 @@
     .page-header { padding: 4rem 3rem 2rem; border-bottom: 0.5px solid var(--light); }
     .page-label { font-size: 10px; letter-spacing: 0.25em; color: var(--text-light); margin-bottom: 1rem; }
     .page-title { font-family: var(--sans-logo); font-weight: 300; font-size: clamp(28px, 4vw, 44px); letter-spacing: 0.08em; color: var(--text-dark); }
-    .content { padding: 4rem 3rem; display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: start; }
-    .about-image { background: var(--off-white); border: 0.5px solid var(--light); aspect-ratio: 3/4; display: flex; align-items: center; justify-content: center; color: var(--mid); font-size: 11px; letter-spacing: 0.12em; }
-    .about-image img { width: 100%; height: 100%; object-fit: cover; }
-    .about-text p { font-family: var(--sans-logo); font-weight: 300; font-size: 16px; line-height: 2.6; color: var(--text); letter-spacing: 0.04em; }
-    .about-text p + p { margin-top: 2rem; }
+    .content { padding: 4rem 3rem; display: flex; flex-direction: column; max-width: 680px; gap: 3rem; }
+    .about-video { aspect-ratio: 16/9; overflow: hidden; }
+    .about-video iframe { width: 100%; height: 100%; display: block; border: none; }
+    .about-text { text-align: left; }
+    .about-title { font-weight: 400; font-size: clamp(20px, 2.5vw, 28px); color: var(--text-dark); margin-bottom: 0.3rem; }
+    .about-subtitle { font-size: 13px; color: var(--text-light); letter-spacing: 0.1em; margin-bottom: 2.5rem; }
+    .about-text p { font-weight: 300; font-size: 14px; line-height: 2.4; color: var(--text); letter-spacing: 0.01em; }
+    .about-text p + p { margin-top: 1.2rem; }
     footer { border-top: 0.5px solid var(--light); padding: 1.8rem 3rem 1.4rem; }
     .footer-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
     .footer-links { display: flex; gap: 2.5rem; }
@@ -69,14 +72,16 @@
     <div class="page-title">Gallery Mirar</div>
   </div>
   <div class="content">
-    <div class="about-image">
-      <!-- <img src="images/about.jpg" alt="Gallery Mirar"> -->
-      GALLERY IMAGE
+    <div class="about-video">
+      <iframe src="https://www.youtube.com/embed/d8gLcyOKCLw?autoplay=1&mute=1&loop=1&playlist=d8gLcyOKCLw&controls=0&showinfo=0&rel=0" allowfullscreen allow="autoplay"></iframe>
     </div>
     <div class="about-text">
-      <p>갤러리 미라르는 감각 중심의 현대회화를 큐레이션합니다.</p>
-      <p>감정, 기억, 반복, 공존, 공간—현실과 비현실 사이의 장면들을 각자의 언어로 다루는 작가들과 함께합니다.</p>
-      <p>작품을 통해 일상의 감각이 조용히 전환되는 경험을 전합니다.</p>
+      <div class="about-title">Gallery Mirar</div>
+      <div class="about-subtitle">시선이 머무는 새로운 일상</div>
+      <p>갤러리 미라르는 '보다(mirar)'라는 의미에서 출발한 공간입니다.</p>
+      <p>우리는 작품이 단순한 감상의 대상이 아니라, 공간의 분위기와 일상의 감각을 조용히 변화시키는 경험이 될 수 있다고 믿습니다.</p>
+      <p>감정과 기억, 반복과 공존, 현실과 비현실 사이의 장면들.</p>
+      <p>갤러리미라르는 각기 다른 시선과 감각을 가진 작가들과 함께, 시선이 오래 머무는 장면들을 만들어갑니다.</p>
     </div>
   </div>
 </main>
