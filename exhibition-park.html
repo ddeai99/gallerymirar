@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>따뜻한 용기, 포근한 위로 — Gallery Mirar</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --white: #ffffff; --off-white: #f8f7f5; --light: #eeece8;
+      --mid: #c8c4bc; --text-light: #999690; --text: #4a4845; --text-dark: #1e1d1b;
+    }
+    body { font-family: 'DM Sans', sans-serif; background: var(--white); color: var(--text-dark); -webkit-font-smoothing: antialiased; }
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; padding: 1.6rem 3rem; background: rgba(255,255,255,0.95); backdrop-filter: blur(8px); border-bottom: 0.5px solid var(--light); }
+    .logo { text-decoration: none; }
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+    .nav-links a { font-size: 10px; letter-spacing: 0.2em; color: var(--text); text-decoration: none; transition: color 0.3s; }
+    .nav-links a:hover, .nav-links a.active { color: var(--text-dark); }
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; }
+    .hamburger span { display: block; width: 22px; height: 0.5px; background: var(--text-dark); }
+    main { padding-top: 80px; }
+    .back-link { display: block; font-size: 10px; letter-spacing: 0.2em; color: var(--text-light); text-decoration: none; padding: 1.5rem 3rem; border-bottom: 0.5px solid var(--light); transition: color 0.3s; }
+    .back-link:hover { color: var(--text-dark); }
+    .back-link::before { content: '← '; }
+    .hero-image { width: 100%; max-width: 700px; margin: 0 auto; aspect-ratio: 1; background: #fff; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+    .hero-image img { max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; display: block; }
+    .exhibit-header { padding: 3rem 3rem 2.5rem; border-bottom: 0.5px solid var(--light); display: grid; grid-template-columns: 1fr auto; align-items: end; gap: 2rem; }
+    .exhibit-title { font-weight: 300; font-size: clamp(20px, 3vw, 34px); letter-spacing: 0.04em; color: var(--text-dark); margin-bottom: 0.5rem; }
+    .exhibit-meta { font-size: 11px; letter-spacing: 0.18em; color: var(--text-light); line-height: 2.2; }
+    .exhibit-tag { font-size: 10px; letter-spacing: 0.2em; color: var(--text-light); padding: 0.4rem 0.8rem; border: 0.5px solid var(--light); display: inline-block; }
+    .exhibit-body { padding: 3.5rem 3rem; max-width: 680px; }
+    .exhibit-body p { font-weight: 300; font-size: 15px; line-height: 2.4; color: var(--text); letter-spacing: 0.01em; }
+    .exhibit-body p + p { margin-top: 1.2rem; }
+    .gallery-section { padding: 0 3rem 4rem; }
+    .gallery-label { font-size: 10px; letter-spacing: 0.25em; color: var(--text-light); margin-bottom: 2rem; padding-top: 1rem; border-top: 0.5px solid var(--light); }
+    .gallery-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+    .gallery-grid .wide { grid-column: span 2; }
+    .gallery-item { overflow: hidden; border: 0.5px solid var(--light); cursor: pointer; }
+    .gallery-item img { width: 100%; height: 100%; object-fit: cover; display: block; aspect-ratio: 4/3; transition: transform 0.5s ease; }
+    .gallery-item.wide img { aspect-ratio: 16/7; }
+    .gallery-item:hover img { transform: scale(1.03); }
+    .lightbox { display: none; position: fixed; inset: 0; z-index: 200; background: rgba(255,255,255,0.97); overflow-y: auto; flex-direction: column; }
+    .lightbox.active { display: flex; }
+    .lb-header { position: sticky; top: 0; display: flex; justify-content: flex-end; padding: 1.4rem 2rem; background: rgba(255,255,255,0.97); border-bottom: 0.5px solid var(--light); z-index: 10; }
+    .lb-close { background: none; border: none; cursor: pointer; font-size: 10px; letter-spacing: 0.2em; color: var(--text-light); display: flex; align-items: center; gap: 0.5rem; transition: color 0.3s; }
+    .lb-close::before { content: '×'; font-size: 18px; font-weight: 300; }
+    .lb-close:hover { color: var(--text-dark); }
+    .lb-body { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 3rem 2rem 4rem; max-width: 900px; margin: 0 auto; width: 100%; }
+    .lb-img-wrap { width: 100%; display: flex; align-items: center; justify-content: center; margin-bottom: 2rem; }
+    .lb-img-wrap img { max-width: 100%; max-height: 75vh; object-fit: contain; display: block; }
+    .lb-nav { display: flex; justify-content: space-between; width: 100%; margin-top: 1rem; }
+    .lb-btn { background: none; border: none; cursor: pointer; font-size: 10px; letter-spacing: 0.2em; color: var(--text-light); transition: color 0.3s; padding: 0; }
+    .lb-btn:hover { color: var(--text-dark); }
+    .lb-btn.prev::before { content: '← '; }
+    .lb-btn.next::after { content: ' →'; }
+    .lb-btn:disabled { opacity: 0.2; cursor: default; }
+    footer { border-top: 0.5px solid var(--light); padding: 1.8rem 3rem 1.4rem; }
+    .footer-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+    .footer-links { display: flex; gap: 2.5rem; }
+    .footer-links a { font-size: 10px; letter-spacing: 0.2em; color: var(--text-light); text-decoration: none; transition: color 0.3s; }
+    .footer-links a:hover { color: var(--text-dark); }
+    .footer-copy { font-size: 10px; letter-spacing: 0.14em; color: var(--text-light); text-align: center; border-top: 0.5px solid var(--light); padding-top: 1rem; }
+    @media (max-width: 768px) {
+      nav { padding: 1.4rem 1.5rem; }
+      .nav-links { display: none; }
+      .nav-links.open { display: flex; flex-direction: column; position: fixed; top: 60px; left: 0; right: 0; background: var(--white); padding: 2rem 1.5rem; border-bottom: 0.5px solid var(--light); gap: 1.8rem; z-index: 99; }
+      .hamburger { display: flex; }
+      .back-link { padding: 1.2rem 1.5rem; }
+      .exhibit-header { grid-template-columns: 1fr; padding: 2rem 1.5rem; }
+      .exhibit-body { padding: 2.5rem 1.5rem; }
+      .gallery-section { padding: 0 1.5rem 3rem; }
+      .gallery-grid { grid-template-columns: 1fr; }
+      .gallery-grid .wide { grid-column: span 1; }
+      footer { padding: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="logo"><img src="logo-small.png" alt="Gallery Mirar" style="height:42px; width:auto; display:block;"></a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="about.html">ABOUT</a></li>
+    <li><a href="artists.html">ARTISTS</a></li>
+    <li><a href="exhibition.html" class="active">EXHIBITION</a></li>
+    <li><a href="contact.html">CONTACT</a></li>
+  </ul>
+  <button class="hamburger" id="hamburger" aria-label="메뉴"><span></span><span></span><span></span></button>
+</nav>
+
+<main>
+  <a href="exhibition.html" class="back-link">EXHIBITION</a>
+
+  <div class="hero-image">
+    <img src="exhibition-park-poster.jpg" alt="따뜻한 용기, 포근한 위로">
+  </div>
+
+  <div class="exhibit-header">
+    <div>
+      <div class="exhibit-title">따뜻한 용기, 포근한 위로</div>
+      <div class="exhibit-meta">
+        박세연<br>
+        2025. 02. 03 — 02. 14
+      </div>
+    </div>
+    <div class="exhibit-tag">PAST</div>
+  </div>
+
+  <div class="exhibit-body">
+    <p>우리가 살아가며 마주하는 다양한 순간들을 이야기합니다.</p>
+    <p>때로는 용기를 내어 한 걸음 내디디고, 때로는 조용히 머물며 스스로를 다독이는 것. 그 모든 모습이 충분히 의미 있고 따뜻한 위로가 될 수 있음을 작품 속에 담았습니다.</p>
+    <p>박세연 작가는 이번 전시를 통해 어떤 감정도, 어떤 모습도 그대로 존중받을 수 있음을 이야기합니다. 지난 전시가 따뜻한 인사였다면, 이번 전시는 조금 더 깊이 다가와 조용히 어깨를 토닥이는 순간이 될 것입니다.</p>
+  </div>
+
+  <div class="gallery-section">
+    <div class="gallery-label">INSTALLATION VIEWS</div>
+    <div class="gallery-grid">
+      <div class="gallery-item wide" onclick="openLb(0)"><img src="exhibition-park-1.jpg" alt="설치 전경"></div>
+      <div class="gallery-item" onclick="openLb(1)"><img src="exhibition-park-2.jpg" alt="작품"></div>
+      <div class="gallery-item" onclick="openLb(2)"><img src="exhibition-park-3.jpg" alt="작품"></div>
+      <div class="gallery-item" onclick="openLb(3)"><img src="exhibition-park-4.jpg" alt="작품"></div>
+      <div class="gallery-item wide" onclick="openLb(4)"><img src="exhibition-park-5.jpg" alt="설치 전경"></div>
+    </div>
+  </div>
+</main>
+
+<div class="lightbox" id="lightbox">
+  <div class="lb-header">
+    <button class="lb-close" onclick="closeLb()">CLOSE</button>
+  </div>
+  <div class="lb-body">
+    <div class="lb-img-wrap" id="lbImgWrap"></div>
+    <div class="lb-nav">
+      <button class="lb-btn prev" id="lbPrev" onclick="moveLb(-1)">PREV</button>
+      <button class="lb-btn next" id="lbNext" onclick="moveLb(1)">NEXT</button>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-top">
+    <div><img src="logo-small.png" alt="Gallery Mirar" style="height:20px; width:auto; opacity:0.4;"></div>
+    <div class="footer-links">
+      <a href="https://instagram.com/gallerymirar" target="_blank">Instagram</a>
+      <a href="https://blog.naver.com/gallerymirar" target="_blank">Blog</a>
+      <a href="https://smartstore.naver.com/gallerymirar" target="_blank">Smartstore</a>
+    </div>
+  </div>
+  <div class="footer-copy">© 2020 Gallery Mirar. All rights reserved.</div>
+</footer>
+
+<script>
+  const hamburger = document.getElementById('hamburger');
+  const navLinks = document.getElementById('navLinks');
+  hamburger.addEventListener('click', () => navLinks.classList.toggle('open'));
+
+  const imgs = ['exhibition-park-1.jpg', 'exhibition-park-2.jpg', 'exhibition-park-3.jpg', 'exhibition-park-4.jpg', 'exhibition-park-5.jpg'];
+  let cur = 0;
+  const lb = document.getElementById('lightbox');
+  const wrap = document.getElementById('lbImgWrap');
+  const prev = document.getElementById('lbPrev');
+  const next = document.getElementById('lbNext');
+
+  function openLb(i) { cur = i; render(); lb.classList.add('active'); document.body.style.overflow = 'hidden'; lb.scrollTop = 0; }
+  function closeLb() { lb.classList.remove('active'); document.body.style.overflow = ''; }
+  function moveLb(d) { cur = Math.max(0, Math.min(imgs.length - 1, cur + d)); render(); lb.scrollTop = 0; }
+  function render() {
+    wrap.innerHTML = `<img src="${imgs[cur]}" alt="">`;
+    prev.disabled = cur === 0;
+    next.disabled = cur === imgs.length - 1;
+  }
+  document.addEventListener('keydown', e => {
+    if (!lb.classList.contains('active')) return;
+    if (e.key === 'Escape') closeLb();
+    if (e.key === 'ArrowLeft') moveLb(-1);
+    if (e.key === 'ArrowRight') moveLb(1);
+  });
+</script>
+</body>
+</html>
