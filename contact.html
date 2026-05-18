@@ -30,20 +30,21 @@
     .page-header { padding: 4rem 3rem 2rem; border-bottom: 0.5px solid var(--light); }
     .page-label { font-size: 10px; letter-spacing: 0.25em; color: var(--text-light); margin-bottom: 1rem; }
     .page-title { font-family: var(--sans-logo); font-weight: 300; font-size: clamp(28px, 4vw, 44px); letter-spacing: 0.08em; color: var(--text-dark); }
-    .content { padding: 4rem 3rem; display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: start; }
+    .content { padding: 4rem 3rem; max-width: 720px; }
     .contact-block { margin-bottom: 2.5rem; }
     .contact-key { font-size: 10px; letter-spacing: 0.22em; color: var(--text-light); margin-bottom: 0.8rem; }
-    .contact-val { font-size: 14px; color: var(--text); line-height: 2.2; font-weight: 300; }
+    .contact-val { font-size: 14px; color: var(--text); line-height: 2; font-weight: 300; }
     .contact-val a { color: var(--text); text-decoration: none; transition: color 0.3s; }
     .contact-val a:hover { color: var(--text-dark); }
+    .channel-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem 3rem; margin-top: 0.5rem; }
+    .channel-link { font-size: 13px; color: var(--text); text-decoration: none; transition: color 0.3s; font-weight: 300; }
+    .channel-link:hover { color: var(--text-dark); }
+    .divider { border: none; border-top: 0.5px solid var(--light); margin: 2.5rem 0; }
+    .private-text { font-size: 14px; color: var(--text); line-height: 2.2; font-weight: 300; }
     .map-wrap { margin-top: 1rem; border: 0.5px solid var(--light); overflow: hidden; position: relative; background: var(--off-white); }
     .map-wrap a { display: block; width: 100%; }
     .map-wrap img { width: 100%; display: block; transition: opacity 0.3s; }
     .map-wrap a:hover img { opacity: 0.85; }
-    .channel-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem 2rem; margin-top: 0.5rem; }
-    .channel-link { font-size: 11px; letter-spacing: 0.18em; color: var(--text); text-decoration: none; transition: color 0.3s; }
-    .channel-link:hover { color: var(--text-dark); }
-    .private-text { font-size: 13px; color: var(--text); line-height: 2.2; font-weight: 300; }
     footer { border-top: 0.5px solid var(--light); padding: 1.8rem 3rem 1.4rem; }
     .footer-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
     .footer-links { display: flex; gap: 2.5rem; }
@@ -78,50 +79,45 @@
     <div class="page-title">Visit & Inquiry</div>
   </div>
   <div class="content">
-    <!-- 왼쪽 -->
-    <div>
-      <div class="contact-block">
-        <div class="contact-key">CHANNELS</div>
-        <div class="channel-grid">
-          <a class="channel-link" href="https://instagram.com/gallerymirar" target="_blank">Instagram</a>
-          <a class="channel-link" href="https://blog.naver.com/gallerymirar" target="_blank">Naver Blog</a>
-          <a class="channel-link" href="https://smartstore.naver.com/gallerymirar" target="_blank">Smartstore</a>
-          <a class="channel-link" href="https://open.kakao.com/o/sH5NjRri" target="_blank">Kakao Channel</a>
-        </div>
-      </div>
-      <div class="contact-block">
-        <div class="contact-key">LOCATION</div>
-        <div class="contact-val">수원시 팔달구 수원천로 255번길 6, 2층 2208호</div>
-      </div>
-      <div class="map-wrap">
-        <a href="https://naver.me/FcmwivXH" target="_blank">
-          <img src="map.jpg" alt="Gallery Mirar 지도">
-        </a>
+    <div class="contact-block">
+      <div class="contact-key">CHANNELS</div>
+      <div class="channel-grid">
+        <a class="channel-link" href="https://instagram.com/gallerymirar" target="_blank">Instagram</a>
+        <a class="channel-link" href="https://blog.naver.com/gallerymirar" target="_blank">Naver Blog</a>
+        <a class="channel-link" href="https://smartstore.naver.com/gallerymirar" target="_blank">Smartstore</a>
+        <a class="channel-link" href="https://open.kakao.com/o/sH5NjRri" target="_blank">Kakao Channel</a>
       </div>
     </div>
-    <!-- 오른쪽 -->
-    <div>
-      <div class="contact-block">
-        <div class="contact-key">HOURS</div>
-        <div class="contact-val">TUE — SUN  10:00 — 19:00</div>
+
+    <div class="contact-block">
+      <div class="contact-key">HOURS</div>
+      <div class="contact-val">Tue — Sun &nbsp; 10:00 — 19:00</div>
+    </div>
+
+    <div class="contact-block">
+      <div class="contact-key">INQUIRY</div>
+      <div class="contact-val">
+        <a href="tel:01029284578">010-2928-4578</a><br>
+        <a href="mailto:gallerymirar@naver.com">gallerymirar@naver.com</a>
       </div>
-      <div class="contact-block">
-        <div class="contact-key">INQUIRY</div>
-        <div class="contact-val">
-          <a href="tel:01029284578">010.2928.4578</a><br>
-          <a href="mailto:gallerymirar@naver.com">gallerymirar@naver.com</a>
-        </div>
+    </div>
+
+    <div class="contact-block">
+      <div class="contact-key">PRIVATE VIEWING</div>
+      <div class="private-text">
+        작품은 놓이는 공간에 따라 다른 분위기로 경험됩니다.<br>
+        공간 기반 프라이빗 뷰잉은 문의 후 진행 가능합니다.
       </div>
-      <div class="contact-block" style="margin-top: 2.5rem; padding-top: 2.5rem; border-top: 0.5px solid var(--light);">
-        <div class="contact-key">PRIVATE VIEWING</div>
-        <div class="private-text">
-          작품은 공간과 거리감에 따라<br>
-          다른 분위기로 경험됩니다.<br><br>
-          Gallery Mirar는 작품이 실제 공간 안에서<br>
-          어떻게 머무는지 함께 살펴볼 수 있는<br>
-          프라이빗 뷰잉을 진행합니다.
-        </div>
-      </div>
+    </div>
+
+    <div class="contact-block">
+      <div class="contact-key">LOCATION</div>
+      <div class="contact-val">수원시 팔달구 수원천로 255번길 6, 2층 2208호</div>
+    </div>
+    <div class="map-wrap">
+      <a href="https://naver.me/FcmwivXH" target="_blank">
+        <img src="map.jpg" alt="Gallery Mirar 지도">
+      </a>
     </div>
   </div>
 </main>
