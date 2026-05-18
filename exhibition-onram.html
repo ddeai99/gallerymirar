@@ -38,9 +38,25 @@
     .gallery-label { font-size: 10px; letter-spacing: 0.25em; color: var(--text-light); margin-bottom: 2rem; padding-top: 1rem; border-top: 0.5px solid var(--light); }
     .gallery-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
     .gallery-grid .wide { grid-column: span 2; }
-    .gallery-item { overflow: hidden; border: 0.5px solid var(--light); }
-    .gallery-item img { width: 100%; height: 100%; object-fit: cover; display: block; aspect-ratio: 4/3; }
+    .gallery-item { overflow: hidden; border: 0.5px solid var(--light); cursor: pointer; }
+    .gallery-item img { width: 100%; height: 100%; object-fit: cover; display: block; aspect-ratio: 4/3; transition: transform 0.5s ease; }
     .gallery-item.wide img { aspect-ratio: 16/7; }
+    .gallery-item:hover img { transform: scale(1.03); }
+    .lightbox { display: none; position: fixed; inset: 0; z-index: 200; background: rgba(255,255,255,0.97); overflow-y: auto; flex-direction: column; }
+    .lightbox.active { display: flex; }
+    .lb-header { position: sticky; top: 0; display: flex; justify-content: flex-end; padding: 1.4rem 2rem; background: rgba(255,255,255,0.97); border-bottom: 0.5px solid var(--light); z-index: 10; }
+    .lb-close { background: none; border: none; cursor: pointer; font-size: 10px; letter-spacing: 0.2em; color: var(--text-light); display: flex; align-items: center; gap: 0.5rem; transition: color 0.3s; }
+    .lb-close::before { content: '×'; font-size: 18px; font-weight: 300; }
+    .lb-close:hover { color: var(--text-dark); }
+    .lb-body { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 3rem 2rem 4rem; max-width: 900px; margin: 0 auto; width: 100%; }
+    .lb-img-wrap { width: 100%; display: flex; align-items: center; justify-content: center; margin-bottom: 2rem; }
+    .lb-img-wrap img { max-width: 100%; max-height: 75vh; object-fit: contain; display: block; }
+    .lb-nav { display: flex; justify-content: space-between; width: 100%; margin-top: 1rem; }
+    .lb-btn { background: none; border: none; cursor: pointer; font-size: 10px; letter-spacing: 0.2em; color: var(--text-light); transition: color 0.3s; padding: 0; }
+    .lb-btn:hover { color: var(--text-dark); }
+    .lb-btn.prev::before { content: '← '; }
+    .lb-btn.next::after { content: ' →'; }
+    .lb-btn:disabled { opacity: 0.2; cursor: default; }
     footer { border-top: 0.5px solid var(--light); padding: 1.8rem 3rem 1.4rem; }
     .footer-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
     .footer-links { display: flex; gap: 2.5rem; }
@@ -101,13 +117,26 @@
   <div class="gallery-section">
     <div class="gallery-label">INSTALLATION VIEWS</div>
     <div class="gallery-grid">
-      <div class="gallery-item wide"><img src="exhibition-onram-4.jpg" alt="설치 전경"></div>
-      <div class="gallery-item"><img src="exhibition-onram-2.jpg" alt="작품"></div>
-      <div class="gallery-item"><img src="exhibition-onram-3.jpg" alt="작품"></div>
-      <div class="gallery-item wide"><img src="exhibition-onram-5.jpg" alt="설치 전경"></div>
+      <div class="gallery-item wide" onclick="openLb(0)"><img src="exhibition-onram-4.jpg" alt="설치 전경"></div>
+      <div class="gallery-item" onclick="openLb(1)"><img src="exhibition-onram-2.jpg" alt="작품"></div>
+      <div class="gallery-item" onclick="openLb(2)"><img src="exhibition-onram-3.jpg" alt="작품"></div>
+      <div class="gallery-item wide" onclick="openLb(3)"><img src="exhibition-onram-5.jpg" alt="설치 전경"></div>
     </div>
   </div>
 </main>
+
+<div class="lightbox" id="lightbox">
+  <div class="lb-header">
+    <button class="lb-close" onclick="closeLb()">CLOSE</button>
+  </div>
+  <div class="lb-body">
+    <div class="lb-img-wrap" id="lbImgWrap"></div>
+    <div class="lb-nav">
+      <button class="lb-btn prev" id="lbPrev" onclick="moveLb(-1)">PREV</button>
+      <button class="lb-btn next" id="lbNext" onclick="moveLb(1)">NEXT</button>
+    </div>
+  </div>
+</div>
 
 <footer>
   <div class="footer-top">
@@ -125,6 +154,28 @@
   const hamburger = document.getElementById('hamburger');
   const navLinks = document.getElementById('navLinks');
   hamburger.addEventListener('click', () => navLinks.classList.toggle('open'));
+
+  const imgs = ['exhibition-onram-4.jpg', 'exhibition-onram-2.jpg', 'exhibition-onram-3.jpg', 'exhibition-onram-5.jpg'];
+  let cur = 0;
+  const lb = document.getElementById('lightbox');
+  const wrap = document.getElementById('lbImgWrap');
+  const prev = document.getElementById('lbPrev');
+  const next = document.getElementById('lbNext');
+
+  function openLb(i) { cur = i; render(); lb.classList.add('active'); document.body.style.overflow = 'hidden'; lb.scrollTop = 0; }
+  function closeLb() { lb.classList.remove('active'); document.body.style.overflow = ''; }
+  function moveLb(d) { cur = Math.max(0, Math.min(imgs.length - 1, cur + d)); render(); lb.scrollTop = 0; }
+  function render() {
+    wrap.innerHTML = `<img src="${imgs[cur]}" alt="">`;
+    prev.disabled = cur === 0;
+    next.disabled = cur === imgs.length - 1;
+  }
+  document.addEventListener('keydown', e => {
+    if (!lb.classList.contains('active')) return;
+    if (e.key === 'Escape') closeLb();
+    if (e.key === 'ArrowLeft') moveLb(-1);
+    if (e.key === 'ArrowRight') moveLb(1);
+  });
 </script>
 </body>
 </html>
