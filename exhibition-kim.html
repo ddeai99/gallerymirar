@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>No Reason — Gallery Mirar</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --white: #ffffff; --off-white: #f8f7f5; --light: #eeece8;
+      --mid: #c8c4bc; --text-light: #999690; --text: #4a4845; --text-dark: #1e1d1b;
+    }
+    body { font-family: 'DM Sans', sans-serif; background: var(--white); color: var(--text-dark); -webkit-font-smoothing: antialiased; }
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; padding: 1.6rem 3rem; background: rgba(255,255,255,0.95); backdrop-filter: blur(8px); border-bottom: 0.5px solid var(--light); }
+    .logo { text-decoration: none; }
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+    .nav-links a { font-size: 10px; letter-spacing: 0.2em; color: var(--text); text-decoration: none; transition: color 0.3s; }
+    .nav-links a:hover, .nav-links a.active { color: var(--text-dark); }
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; }
+    .hamburger span { display: block; width: 22px; height: 0.5px; background: var(--text-dark); }
+    main { padding-top: 80px; }
+    .back-link { display: block; font-size: 10px; letter-spacing: 0.2em; color: var(--text-light); text-decoration: none; padding: 1.5rem 3rem; border-bottom: 0.5px solid var(--light); transition: color 0.3s; }
+    .back-link:hover { color: var(--text-dark); }
+    .back-link::before { content: '← '; }
+    .hero-image { width: 100%; height: 60vh; overflow: hidden; }
+    .hero-image img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .exhibit-header { padding: 3rem 3rem 2.5rem; border-bottom: 0.5px solid var(--light); display: grid; grid-template-columns: 1fr auto; align-items: end; gap: 2rem; }
+    .exhibit-title { font-weight: 300; font-size: clamp(20px, 3vw, 34px); letter-spacing: 0.04em; color: var(--text-dark); margin-bottom: 0.5rem; }
+    .exhibit-meta { font-size: 11px; letter-spacing: 0.18em; color: var(--text-light); line-height: 2.2; }
+    .exhibit-tag { font-size: 10px; letter-spacing: 0.2em; color: var(--text-light); padding: 0.4rem 0.8rem; border: 0.5px solid var(--light); display: inline-block; }
+    .exhibit-body { padding: 3.5rem 3rem; max-width: 680px; }
+    .exhibit-body p { font-weight: 300; font-size: 15px; line-height: 2.4; color: var(--text); letter-spacing: 0.01em; }
+    .exhibit-body p + p { margin-top: 1.2rem; }
+    .gallery-section { padding: 0 3rem 4rem; }
+    .gallery-label { font-size: 10px; letter-spacing: 0.25em; color: var(--text-light); margin-bottom: 2rem; padding-top: 1rem; border-top: 0.5px solid var(--light); }
+    .gallery-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+    .gallery-grid .wide { grid-column: span 2; }
+    .gallery-item { overflow: hidden; border: 0.5px solid var(--light); }
+    .gallery-item img { width: 100%; height: 100%; object-fit: cover; display: block; aspect-ratio: 4/3; }
+    .gallery-item.wide img { aspect-ratio: 16/7; }
+    footer { border-top: 0.5px solid var(--light); padding: 1.8rem 3rem 1.4rem; }
+    .footer-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+    .footer-links { display: flex; gap: 2.5rem; }
+    .footer-links a { font-size: 10px; letter-spacing: 0.2em; color: var(--text-light); text-decoration: none; transition: color 0.3s; }
+    .footer-links a:hover { color: var(--text-dark); }
+    .footer-copy { font-size: 10px; letter-spacing: 0.14em; color: var(--text-light); text-align: center; border-top: 0.5px solid var(--light); padding-top: 1rem; }
+    @media (max-width: 768px) {
+      nav { padding: 1.4rem 1.5rem; }
+      .nav-links { display: none; }
+      .nav-links.open { display: flex; flex-direction: column; position: fixed; top: 60px; left: 0; right: 0; background: var(--white); padding: 2rem 1.5rem; border-bottom: 0.5px solid var(--light); gap: 1.8rem; z-index: 99; }
+      .hamburger { display: flex; }
+      .back-link { padding: 1.2rem 1.5rem; }
+      .exhibit-header { grid-template-columns: 1fr; padding: 2rem 1.5rem; }
+      .exhibit-body { padding: 2.5rem 1.5rem; }
+      .gallery-section { padding: 0 1.5rem 3rem; }
+      .gallery-grid { grid-template-columns: 1fr; }
+      .gallery-grid .wide { grid-column: span 1; }
+      footer { padding: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="logo"><img src="logo-small.png" alt="Gallery Mirar" style="height:42px; width:auto; display:block;"></a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="about.html">ABOUT</a></li>
+    <li><a href="artists.html">ARTISTS</a></li>
+    <li><a href="exhibition.html" class="active">EXHIBITION</a></li>
+    <li><a href="contact.html">CONTACT</a></li>
+  </ul>
+  <button class="hamburger" id="hamburger" aria-label="메뉴"><span></span><span></span><span></span></button>
+</nav>
+
+<main>
+  <a href="exhibition.html" class="back-link">EXHIBITION</a>
+
+  <div class="hero-image">
+    <img src="exhibition-kim-1.jpg" alt="No Reason">
+  </div>
+
+  <div class="exhibit-header">
+    <div>
+      <div class="exhibit-title">No Reason</div>
+      <div class="exhibit-meta">
+        김인<br>
+        2025. 03. 04 — 03. 17
+      </div>
+    </div>
+    <div class="exhibit-tag">PAST</div>
+  </div>
+
+  <div class="exhibit-body">
+    <p>김인 작가의 작품은 강렬한 색과 반복적인 이미지가 특징적입니다. 하지만 단순히 색이 강해서, 혹은 패턴이 반복되기 때문만이 아니라, 그 안에서 새로운 감각과 해석의 가능성을 발견할 수 있습니다.</p>
+    <p>그의 작품에서 색은 단순한 배경이 아니라 감정을 전달하는 주체가 됩니다. 규칙적인 이미지의 반복 속에서도 미묘한 차이가 더해지며, 익숙하면서도 낯선 감각을 불러일으킵니다. 특히 자주 등장하는 주먹의 형상은 힘과 결의를 상징하면서도, 개별적인 해석의 여지를 남겨둡니다.</p>
+  </div>
+
+  <div class="gallery-section">
+    <div class="gallery-label">INSTALLATION VIEWS</div>
+    <div class="gallery-grid">
+      <div class="gallery-item wide"><img src="exhibition-kim-5.jpg" alt="설치 전경"></div>
+      <div class="gallery-item"><img src="exhibition-kim-2.jpg" alt="작품"></div>
+      <div class="gallery-item"><img src="exhibition-kim-3.jpg" alt="작품"></div>
+      <div class="gallery-item wide"><img src="exhibition-kim-4.jpg" alt="설치 전경"></div>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="footer-top">
+    <div><img src="logo-small.png" alt="Gallery Mirar" style="height:20px; width:auto; opacity:0.4;"></div>
+    <div class="footer-links">
+      <a href="https://instagram.com/gallerymirar" target="_blank">Instagram</a>
+      <a href="https://blog.naver.com/gallerymirar" target="_blank">Blog</a>
+      <a href="https://smartstore.naver.com/gallerymirar" target="_blank">Smartstore</a>
+    </div>
+  </div>
+  <div class="footer-copy">© 2020 Gallery Mirar. All rights reserved.</div>
+</footer>
+
+<script>
+  const hamburger = document.getElementById('hamburger');
+  const navLinks = document.getElementById('navLinks');
+  hamburger.addEventListener('click', () => navLinks.classList.toggle('open'));
+</script>
+</body>
+</html>
