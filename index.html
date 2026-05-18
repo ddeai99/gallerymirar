@@ -14,34 +14,126 @@
       --sans-logo: 'DM Sans', sans-serif;
     }
     body { font-family: 'DM Sans', sans-serif; background: var(--white); color: var(--text-dark); -webkit-font-smoothing: antialiased; }
+
     nav {
       position: fixed; top: 0; left: 0; right: 0; z-index: 100;
       display: flex; justify-content: space-between; align-items: center;
       padding: 1.6rem 3rem; background: rgba(255,255,255,0.95); backdrop-filter: blur(8px);
       border-bottom: 0.5px solid var(--light);
     }
-    .logo { font-family: var(--sans-logo); font-weight: 300; font-size: 16px; letter-spacing: 0.22em; color: var(--text-dark); text-decoration: none; }
+    .logo { text-decoration: none; }
     .nav-links { display: flex; gap: 2.5rem; list-style: none; }
     .nav-links a { font-size: 10px; letter-spacing: 0.2em; color: var(--text); text-decoration: none; transition: color 0.3s; }
     .nav-links a:hover { color: var(--text-dark); }
     .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; }
     .hamburger span { display: block; width: 22px; height: 0.5px; background: var(--text-dark); }
-    .hero { padding-top: 80px; height: 100vh; display: flex; flex-direction: column; }
-    .hero-image { flex: 1; background: var(--light); display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; }
-    .hero-image img { width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0; }
-    .hero-placeholder { text-align: center; color: var(--mid); font-size: 11px; letter-spacing: 0.15em; }
-    .hero-text { padding: 2.5rem 3rem; border-top: 0.5px solid var(--light); display: flex; justify-content: space-between; align-items: flex-end; }
-    .hero-tagline { font-family: var(--sans-logo); font-weight: 300; font-size: clamp(16px, 2vw, 22px); line-height: 1.9; color: var(--text-dark); letter-spacing: 0.04em; }
-    .hero-sub { font-size: 10px; letter-spacing: 0.2em; color: var(--text-light); }
-    footer { border-top: 0.5px solid var(--light); padding: 2rem 3rem; display: flex; justify-content: space-between; align-items: center; }
-    .footer-logo { font-family: var(--sans-logo); font-size: 13px; font-weight: 300; letter-spacing: 0.2em; color: var(--text-light); }
+
+    /* 메인 레이아웃 */
+    .main-wrap {
+      padding-top: 80px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .hero-section {
+      flex: 1;
+      display: flex;
+      align-items: stretch;
+      padding: 3rem;
+      gap: 3rem;
+    }
+
+    /* 슬라이더 */
+    .slider-wrap {
+      flex: 0 0 auto;
+      width: min(55vh, 55vw);
+      aspect-ratio: 1;
+      position: relative;
+      overflow: hidden;
+      background: var(--light);
+      align-self: center;
+    }
+
+    .slide {
+      position: absolute; inset: 0;
+      opacity: 0;
+      transition: opacity 0.8s ease;
+    }
+    .slide.active { opacity: 1; }
+    .slide img {
+      width: 100%; height: 100%;
+      object-fit: cover; display: block;
+    }
+
+    /* 슬라이더 도트 */
+    .slider-dots {
+      position: absolute;
+      bottom: 14px; left: 0; right: 0;
+      display: flex; justify-content: center; gap: 6px;
+      z-index: 10;
+    }
+    .dot {
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.5);
+      cursor: pointer;
+      transition: background 0.3s;
+      border: none;
+    }
+    .dot.active { background: rgba(255,255,255,0.95); }
+
+    /* 오른쪽 텍스트 */
+    .hero-text {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding-bottom: 0.5rem;
+    }
+    .hero-tagline {
+      font-weight: 300;
+      font-size: clamp(15px, 1.8vw, 22px);
+      line-height: 2;
+      color: var(--text-dark);
+      letter-spacing: 0.02em;
+    }
+    .hero-sub {
+      margin-top: 1.2rem;
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      color: var(--text-light);
+    }
+
+    /* 하단 바 */
+    .hero-bottom {
+      padding: 1.5rem 3rem;
+      border-top: 0.5px solid var(--light);
+      display: flex;
+      justify-content: flex-end;
+    }
+    .hero-bottom-sub {
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      color: var(--text-light);
+    }
+
+    footer {
+      border-top: 0.5px solid var(--light);
+      padding: 1.8rem 3rem;
+      display: flex; justify-content: space-between; align-items: center;
+    }
     .footer-copy { font-size: 10px; letter-spacing: 0.14em; color: var(--text-light); }
+
     @media (max-width: 768px) {
       nav { padding: 1.4rem 1.5rem; }
       .nav-links { display: none; }
       .nav-links.open { display: flex; flex-direction: column; position: fixed; top: 60px; left: 0; right: 0; background: var(--white); padding: 2rem 1.5rem; border-bottom: 0.5px solid var(--light); gap: 1.8rem; z-index: 99; }
       .hamburger { display: flex; }
-      .hero-text { flex-direction: column; gap: 1rem; padding: 2rem 1.5rem; }
+      .hero-section { flex-direction: column; padding: 2rem 1.5rem; gap: 2rem; }
+      .slider-wrap { width: 100%; aspect-ratio: 1; align-self: stretch; }
+      .hero-text { padding-bottom: 0; }
+      .hero-bottom { padding: 1.2rem 1.5rem; }
       footer { flex-direction: column; gap: 0.8rem; text-align: center; padding: 1.5rem; }
     }
   </style>
@@ -57,24 +149,69 @@
   </ul>
   <button class="hamburger" id="hamburger" aria-label="메뉴"><span></span><span></span><span></span></button>
 </nav>
-<div class="hero">
-  <div class="hero-image">
-    <!-- 이미지: <img src="images/main.jpg" alt="Gallery Mirare"> -->
-    <div class="hero-placeholder">MAIN IMAGE</div>
-  </div>
-  <div class="hero-text">
-    <div class="hero-tagline">공간 안 감정의 결을 바꾸는 회화<br>현실을 잠시 다른 감각으로 바라보게 하는 장면</div>
-    <div class="hero-sub">GALLERY MIRARE · SUWON</div>
+
+<div class="main-wrap">
+  <div class="hero-section">
+    <div class="slider-wrap">
+      <div class="slide active"><img src="main1.jpg" alt="작품 1"></div>
+      <div class="slide"><img src="main2.jpg" alt="작품 2"></div>
+      <div class="slide"><img src="main3.jpg" alt="작품 3"></div>
+      <div class="slide"><img src="main4.jpg" alt="작품 4"></div>
+      <div class="slider-dots">
+        <button class="dot active" data-i="0"></button>
+        <button class="dot" data-i="1"></button>
+        <button class="dot" data-i="2"></button>
+        <button class="dot" data-i="3"></button>
+      </div>
+    </div>
+    <div class="hero-text">
+      <div class="hero-tagline">
+        공간 안 감정의 결을 바꾸는 회화<br>
+        현실을 잠시 다른 감각으로 바라보게 하는 장면
+      </div>
+      <div class="hero-sub">GALLERY MIRARE · SUWON</div>
+    </div>
   </div>
 </div>
+
 <footer>
-  <div class="footer-logo"><img src="logo-small.png" alt="Gallery Mirar" style="height:22px; width:auto; opacity:0.5;"></div>
+  <div><img src="logo-small.png" alt="Gallery Mirar" style="height:20px; width:auto; opacity:0.4;"></div>
   <div class="footer-copy">© 2025 Gallery Mirare. All rights reserved.</div>
 </footer>
+
 <script>
   const hamburger = document.getElementById('hamburger');
   const navLinks = document.getElementById('navLinks');
   hamburger.addEventListener('click', () => navLinks.classList.toggle('open'));
+
+  const slides = document.querySelectorAll('.slide');
+  const dots = document.querySelectorAll('.dot');
+  let current = 0;
+  let timer;
+
+  function goTo(n) {
+    slides[current].classList.remove('active');
+    dots[current].classList.remove('active');
+    current = (n + slides.length) % slides.length;
+    slides[current].classList.add('active');
+    dots[current].classList.add('active');
+  }
+
+  function next() { goTo(current + 1); }
+
+  function startTimer() {
+    timer = setInterval(next, 3500);
+  }
+
+  dots.forEach(dot => {
+    dot.addEventListener('click', () => {
+      clearInterval(timer);
+      goTo(parseInt(dot.dataset.i));
+      startTimer();
+    });
+  });
+
+  startTimer();
 </script>
 </body>
 </html>
