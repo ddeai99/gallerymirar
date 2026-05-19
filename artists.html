@@ -42,7 +42,18 @@
       display: flex; align-items: flex-end; padding: 1.2rem;
       transition: background 0.4s;
     }
-    .artist-card:hover .artist-img-overlay { background: rgba(30,29,27,0.08); }
+    .artist-card:hover .artist-img-overlay { background: rgba(30,29,27,0.55); }
+    .artist-img-info {
+      opacity: 0; transform: translateY(6px);
+      transition: opacity 0.3s, transform 0.3s;
+    }
+    .artist-card:hover .artist-img-info { opacity: 1; transform: translateY(0); }
+    .artist-img-overlay {
+      position: absolute; inset: 0; background: rgba(30,29,27,0);
+      display: flex; flex-direction: column; justify-content: flex-end;
+      padding: 1.2rem; transition: background 0.4s;
+    }
+    .artist-overlay-name { font-family: var(--sans-logo); font-size: 16px; font-weight: 300; color: #fff; letter-spacing: 0.08em; }
     .artist-name { font-family: var(--sans-logo); font-size: 18px; font-weight: 300; letter-spacing: 0.08em; color: var(--text-dark); margin-bottom: 0.4rem; }
     .artist-keyword { font-size: 11px; letter-spacing: 0.14em; color: var(--text-light); }
     footer { border-top: 0.5px solid var(--light); padding: 1.8rem 3rem 1.4rem; margin-top: 2rem; }
@@ -84,30 +95,25 @@
 
       <a class="artist-card" href="artist-kimkyungwon.html">
         <div class="artist-img">
-        <img src="artist-kimkyungwon-jowoo2.jpg" alt="김경원">
-          <div class="artist-img-overlay"></div>
+          <img src="artist-kimkyungwon-jowoo2.jpg" alt="김경원">
+          <div class="artist-img-overlay"><div class="artist-img-info"><div class="artist-overlay-name">김경원</div></div></div>
         </div>
-        <div class="artist-name">김경원</div>
       </a>
 
       <!-- 작가 카드 샘플 B -->
       <a class="artist-card" href="artist-b.html">
         <div class="artist-img">
-          <!-- <img src="images/artist-b.jpg" alt="작가 B"> -->
-          <div class="artist-img-overlay"></div>
+          <div class="artist-img-overlay"><div class="artist-img-info"><div class="artist-overlay-name">작가 B</div></div></div>
           ARTIST IMAGE
         </div>
-        <div class="artist-name">작가 B</div>
       </a>
 
       <!-- 작가 카드 샘플 C -->
       <a class="artist-card" href="artist-c.html">
         <div class="artist-img">
-          <!-- <img src="images/artist-c.jpg" alt="작가 C"> -->
-          <div class="artist-img-overlay"></div>
+          <div class="artist-img-overlay"><div class="artist-img-info"><div class="artist-overlay-name">작가 C</div></div></div>
           ARTIST IMAGE
         </div>
-        <div class="artist-name">작가 C</div>
       </a>
 
     </div>
