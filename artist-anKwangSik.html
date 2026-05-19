@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>안광식 — Gallery Mirar</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --white: #ffffff; --off-white: #f8f7f5; --light: #eeece8;
+      --mid: #c8c4bc; --text-light: #999690; --text: #4a4845; --text-dark: #1e1d1b;
+      --sans-logo: 'DM Sans', sans-serif;
+    }
+    body { font-family: 'DM Sans', sans-serif; background: var(--white); color: var(--text-dark); -webkit-font-smoothing: antialiased; }
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; padding: 1.6rem 3rem; background: rgba(255,255,255,0.95); backdrop-filter: blur(8px); border-bottom: 0.5px solid var(--light); }
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+    .nav-links a { font-size: 10px; letter-spacing: 0.2em; color: var(--text); text-decoration: none; transition: color 0.3s; }
+    .nav-links a:hover, .nav-links a.active { color: var(--text-dark); }
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; }
+    .hamburger span { display: block; width: 22px; height: 0.5px; background: var(--text-dark); }
+
+    main { padding-top: 80px; }
+    .back-link { display: block; font-size: 10px; letter-spacing: 0.2em; color: var(--text-light); text-decoration: none; padding: 1.5rem 3rem; border-bottom: 0.5px solid var(--light); transition: color 0.3s; }
+    .back-link:hover { color: var(--text-dark); }
+    .back-link::before { content: '← '; }
+
+    .hero-image { width: 100%; height: 55vh; background: var(--off-white); overflow: hidden; }
+    .hero-image img { width: 100%; height: 100%; object-fit: cover; }
+
+    .artist-header { padding: 3rem 3rem 2.5rem; border-bottom: 0.5px solid var(--light); }
+    .artist-name { font-family: var(--sans-logo); font-weight: 300; font-size: clamp(28px, 4vw, 44px); letter-spacing: 0.08em; color: var(--text-dark); }
+
+    .artist-body { padding: 3.5rem 3rem; display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; }
+    .artist-bio p { font-family: var(--sans-logo); font-weight: 300; font-size: 16px; line-height: 2.6; color: var(--text); letter-spacing: 0.04em; }
+    .artist-bio p + p { margin-top: 1.5rem; }
+    .cv-label { font-size: 10px; letter-spacing: 0.22em; color: var(--text-light); margin-bottom: 1rem; }
+    .cv-item { font-size: 13px; color: var(--text); line-height: 2.4; font-weight: 300; border-top: 0.5px solid var(--light); padding: 0.6rem 0; }
+
+    .works-section { padding: 0 3rem 5rem; }
+    .works-label { font-size: 10px; letter-spacing: 0.25em; color: var(--text-light); margin-bottom: 2rem; padding-top: 1rem; border-top: 0.5px solid var(--light); }
+    .works-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+    .work-thumb { cursor: pointer; background: var(--off-white); border: 0.5px solid var(--light); aspect-ratio: 1; overflow: hidden; display: flex; align-items: center; justify-content: center; position: relative; }
+    .work-thumb img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; display: block; }
+    .work-thumb:hover img { transform: scale(1.04); }
+    .work-thumb-overlay { position: absolute; inset: 0; background: rgba(30,29,27,0); transition: background 0.4s; display: flex; flex-direction: column; justify-content: flex-end; padding: 1.2rem; }
+    .work-thumb:hover .work-thumb-overlay { background: rgba(30,29,27,0.55); }
+    .work-thumb-info { opacity: 0; transform: translateY(6px); transition: opacity 0.3s, transform 0.3s; }
+    .work-thumb:hover .work-thumb-info { opacity: 1; transform: translateY(0); }
+    .work-thumb-title { font-family: var(--sans-logo); font-size: 13px; font-weight: 300; color: #fff; letter-spacing: 0.06em; margin-bottom: 0.3rem; }
+    .work-thumb-meta { font-size: 10px; letter-spacing: 0.12em; color: rgba(255,255,255,0.65); line-height: 1.8; }
+
+    .lightbox { display: none; position: fixed; inset: 0; z-index: 200; background: rgba(255,255,255,0.97); overflow-y: auto; }
+    .lightbox.active { display: flex; flex-direction: column; }
+    .lightbox-header { position: sticky; top: 0; display: flex; justify-content: flex-end; padding: 1.4rem 2rem; background: rgba(255,255,255,0.97); border-bottom: 0.5px solid var(--light); z-index: 10; }
+    .lightbox-close { background: none; border: none; cursor: pointer; font-size: 10px; letter-spacing: 0.2em; color: var(--text-light); display: flex; align-items: center; gap: 0.5rem; transition: color 0.3s; }
+    .lightbox-close:hover { color: var(--text-dark); }
+    .lightbox-close::before { content: '×'; font-size: 18px; font-weight: 300; }
+    .lightbox-body { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 3rem 2rem 4rem; max-width: 900px; margin: 0 auto; width: 100%; }
+    .lightbox-img-wrap { width: 100%; display: flex; align-items: center; justify-content: center; margin-bottom: 2rem; }
+    .lightbox-img-wrap img { max-width: 100%; max-height: 70vh; object-fit: contain; display: block; }
+    .lightbox-caption { width: 100%; border-top: 0.5px solid var(--light); padding-top: 1.5rem; }
+    .caption-title { font-family: var(--sans-logo); font-weight: 300; font-size: 20px; letter-spacing: 0.06em; color: var(--text-dark); margin-bottom: 0.6rem; }
+    .caption-meta { font-size: 12px; letter-spacing: 0.14em; color: var(--text-light); line-height: 2.2; }
+    .lightbox-nav { display: flex; justify-content: space-between; width: 100%; margin-top: 2rem; }
+    .nav-btn { background: none; border: none; cursor: pointer; font-size: 10px; letter-spacing: 0.2em; color: var(--text-light); display: flex; align-items: center; gap: 0.5rem; transition: color 0.3s; padding: 0; }
+    .nav-btn:hover { color: var(--text-dark); }
+    .nav-btn.prev::before { content: '←'; font-size: 14px; }
+    .nav-btn.next::after { content: '→'; font-size: 14px; }
+    .nav-btn:disabled { opacity: 0.2; cursor: default; }
+
+    footer { border-top: 0.5px solid var(--light); padding: 1.8rem 3rem 1.4rem; }
+    .footer-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+    .footer-links { display: flex; gap: 2.5rem; }
+    .footer-links a { font-size: 10px; letter-spacing: 0.2em; color: var(--text-light); text-decoration: none; transition: color 0.3s; }
+    .footer-links a:hover { color: var(--text-dark); }
+    .footer-copy { font-size: 10px; letter-spacing: 0.14em; color: var(--text-light); text-align: center; border-top: 0.5px solid var(--light); padding-top: 1rem; }
+
+    @media (max-width: 768px) {
+      nav { padding: 1.4rem 1.5rem; }
+      .nav-links { display: none; }
+      .nav-links.open { display: flex; flex-direction: column; position: fixed; top: 60px; left: 0; right: 0; background: var(--white); padding: 2rem 1.5rem; border-bottom: 0.5px solid var(--light); gap: 1.8rem; z-index: 99; }
+      .hamburger { display: flex; }
+      .back-link { padding: 1.2rem 1.5rem; }
+      .artist-header { padding: 2rem 1.5rem; }
+      .artist-body { grid-template-columns: 1fr; gap: 2.5rem; padding: 2.5rem 1.5rem; }
+      .works-section { padding: 0 1.5rem 3rem; }
+      .works-grid { grid-template-columns: repeat(2, 1fr); }
+      .lightbox-body { padding: 2rem 1.2rem 3rem; }
+      footer { flex-direction: column; gap: 0.8rem; text-align: center; padding: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+<nav>
+  <a href="index.html"><img src="logo-small.png" alt="Gallery Mirar" style="height:42px; width:auto; display:block;"></a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="about.html">ABOUT</a></li>
+    <li><a href="artists.html" class="active">ARTISTS</a></li>
+    <li><a href="exhibition.html">EXHIBITION</a></li>
+    <li><a href="contact.html">CONTACT</a></li>
+  </ul>
+  <button class="hamburger" id="hamburger" aria-label="메뉴"><span></span><span></span><span></span></button>
+</nav>
+
+<main>
+  <a href="artists.html" class="back-link">ARTISTS</a>
+
+  <div class="hero-image">
+    <img src="artist-anKwangSik-natureMemory-91x60.jpg" alt="안광식">
+  </div>
+
+  <div class="artist-header">
+    <div class="artist-name">안광식</div>
+  </div>
+
+  <div class="artist-body">
+    <div class="artist-bio">
+      <p>자연 속에 있는 나는 자연에게 다가서지 않는다. 멀리서 지켜보고, 스쳐 지나가 빛으로만 남는다. 흔들린다. 문득, 그리고 스친다. 내 삶의 경계선과 정체성을 찾아 헤매다 프레임을 만든다.</p>
+      <p>자연(대상)을 보고 그리지 않는다. 기억으로만 인지하고 노래하듯 그려나간다. 잘 그리지 않아도 좋다. 다만 기억한 것들을 일기 쓰듯 잘 늘려트리면 족하다.</p>
+      <p>나를 에워싸고 있는 모든 자연들과 자연 안에 나와 삶의 관계를 부인할 수 없음에, 망각의 세월들을 아련한 그리움의 풍광으로 풀어놓는다. 관객으로 하여금 자연에서 느끼는 마음의 정화와 정적인 고요, 그리움을 바라며 반복해서 비워내고 버릴 수 있는 장치가 되었으면 한다.</p>
+    </div>
+    <div>
+      <div class="cv-label">SOLO EXHIBITIONS</div>
+      <div class="cv-item">2019  나우리아트센터, 서울</div>
+      <div class="cv-item">2018  미안갤러리, 김해</div>
+      <div class="cv-item">2017  선화랑, 서울</div>
+      <div class="cv-item">2017  OCI갤러리, 안동</div>
+      <div class="cv-item">2016  아인갤러리, 부산</div>
+      <div class="cv-item">2016  현대아트센터, 분당</div>
+      <div class="cv-item">2015  한두뼘갤러리, 강화도</div>
+      <div class="cv-item">2014  해운아트갤러리, 부산</div>
+      <div class="cv-item">2010  밀레니엄 힐튼, 서울</div>
+      <div class="cv-item" style="color:var(--text-light);">외 다수 (총 29회)</div>
+
+      <div class="cv-label" style="margin-top:2rem;">SELECTED GROUP EXHIBITIONS</div>
+      <div class="cv-item">BLOOMING전  선화랑, 서울</div>
+      <div class="cv-item">예감 6인전  선화랑, 서울</div>
+      <div class="cv-item">한국당대회화 5인  옌타이문화회관, 중국</div>
+      <div class="cv-item" style="color:var(--text-light);">외 다수</div>
+
+      <div class="cv-label" style="margin-top:2rem;">ART FAIRS</div>
+      <div class="cv-item">Affordable Art Fair  런던 / 싱가포르 / 서울</div>
+      <div class="cv-item">아트부산  BEXCO, 부산</div>
+      <div class="cv-item">화랑미술제  COEX, 서울</div>
+      <div class="cv-item">Europ'art  PALEXPO, 제네바</div>
+      <div class="cv-item">ICEC Contemporary Istanbul  터키</div>
+      <div class="cv-item" style="color:var(--text-light);">외 다수</div>
+
+      <div class="cv-label" style="margin-top:2rem;">COLLECTIONS</div>
+      <div class="cv-item">국립현대미술관 미술은행, 매일경제신문사, 기업은행, 계명대학교 동산병원 외</div>
+    </div>
+  </div>
+
+  <div class="works-section">
+    <div class="works-label">WORKS</div>
+    <div class="works-grid">
+
+      <div class="work-thumb"
+        data-src="artist-anKwangSik-natureMemory-91x60.jpg"
+        data-title="Nature-memory"
+        data-year="2024"
+        data-material="Oil on canvas"
+        data-size="91 × 60 cm">
+        <img src="artist-anKwangSik-natureMemory-91x60.jpg" alt="Nature-memory">
+        <div class="work-thumb-overlay"><div class="work-thumb-info"><div class="work-thumb-title"></div><div class="work-thumb-meta"></div></div></div>
+      </div>
+
+      <div class="work-thumb"
+        data-src="artist-anKwangSik-natureMemory-72x50.jpg"
+        data-title="Nature-memory"
+        data-year="2024"
+        data-material="Oil on canvas"
+        data-size="72.7 × 50 cm">
+        <img src="artist-anKwangSik-natureMemory-72x50.jpg" alt="Nature-memory">
+        <div class="work-thumb-overlay"><div class="work-thumb-info"><div class="work-thumb-title"></div><div class="work-thumb-meta"></div></div></div>
+      </div>
+
+      <div class="work-thumb"
+        data-src="artist-anKwangSik-natureDiary-pink.jpg"
+        data-title="Nature-diary"
+        data-year="2024"
+        data-material="Oil on canvas"
+        data-size="72.7 × 60.6 cm">
+        <img src="artist-anKwangSik-natureDiary-pink.jpg" alt="Nature-diary">
+        <div class="work-thumb-overlay"><div class="work-thumb-info"><div class="work-thumb-title"></div><div class="work-thumb-meta"></div></div></div>
+      </div>
+
+      <div class="work-thumb"
+        data-src="artist-anKwangSik-natureDiary-purple.jpg"
+        data-title="Nature-diary"
+        data-year="2024"
+        data-material="Oil on canvas"
+        data-size="72.7 × 60.6 cm">
+        <img src="artist-anKwangSik-natureDiary-purple.jpg" alt="Nature-diary">
+        <div class="work-thumb-overlay"><div class="work-thumb-info"><div class="work-thumb-title"></div><div class="work-thumb-meta"></div></div></div>
+      </div>
+
+      <div class="work-thumb"
+        data-src="artist-anKwangSik-natureDiary-yellow.jpg"
+        data-title="Nature-diary"
+        data-year="2024"
+        data-material="Oil on canvas"
+        data-size="72.7 × 60.6 cm">
+        <img src="artist-anKwangSik-natureDiary-yellow.jpg" alt="Nature-diary">
+        <div class="work-thumb-overlay"><div class="work-thumb-info"><div class="work-thumb-title"></div><div class="work-thumb-meta"></div></div></div>
+      </div>
+
+      <div class="work-thumb"
+        data-src="artist-anKwangSik-natureDiary-daisy.jpg"
+        data-title="Nature-diary"
+        data-year="2023"
+        data-material="Oil on canvas"
+        data-size="116.8 × 72.7 cm">
+        <img src="artist-anKwangSik-natureDiary-daisy.jpg" alt="Nature-diary">
+        <div class="work-thumb-overlay"><div class="work-thumb-info"><div class="work-thumb-title"></div><div class="work-thumb-meta"></div></div></div>
+      </div>
+
+      <div class="work-thumb"
+        data-src="artist-anKwangSik-natureDiary-branch.jpg"
+        data-title="Nature-diary"
+        data-year="2025"
+        data-material="Oil on canvas"
+        data-size="54 × 45.5 cm">
+        <img src="artist-anKwangSik-natureDiary-branch.jpg" alt="Nature-diary">
+        <div class="work-thumb-overlay"><div class="work-thumb-info"><div class="work-thumb-title"></div><div class="work-thumb-meta"></div></div></div>
+      </div>
+
+      <div class="work-thumb"
+        data-src="artist-anKwangSik-natureDiary-lavender.jpg"
+        data-title="Nature-diary"
+        data-year="2022"
+        data-material="Oil on canvas"
+        data-size="91 × 91 cm">
+        <img src="artist-anKwangSik-natureDiary-lavender.jpg" alt="Nature-diary">
+        <div class="work-thumb-overlay"><div class="work-thumb-info"><div class="work-thumb-title"></div><div class="work-thumb-meta"></div></div></div>
+      </div>
+
+      <div class="work-thumb"
+        data-src="artist-anKwangSik-natureDiary-bowlPink.jpg"
+        data-title="Nature-diary"
+        data-year="2024"
+        data-material="Oil on canvas"
+        data-size="72.7 × 60.6 cm">
+        <img src="artist-anKwangSik-natureDiary-bowlPink.jpg" alt="Nature-diary">
+        <div class="work-thumb-overlay"><div class="work-thumb-info"><div class="work-thumb-title"></div><div class="work-thumb-meta"></div></div></div>
+      </div>
+
+    </div>
+  </div>
+</main>
+
+<div class="lightbox" id="lightbox">
+  <div class="lightbox-header">
+    <button class="lightbox-close" id="lbClose">CLOSE</button>
+  </div>
+  <div class="lightbox-body">
+    <div class="lightbox-img-wrap" id="lbImgWrap"></div>
+    <div class="lightbox-caption">
+      <div class="caption-title" id="lbTitle"></div>
+      <div class="caption-meta" id="lbMeta"></div>
+    </div>
+    <div class="lightbox-nav">
+      <button class="nav-btn prev" id="lbPrev">PREV</button>
+      <button class="nav-btn next" id="lbNext">NEXT</button>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-top">
+    <div><img src="logo-small.png" alt="Gallery Mirar" style="height:20px; width:auto; opacity:0.4;"></div>
+    <div class="footer-links">
+      <a href="https://instagram.com/gallerymirar" target="_blank">Instagram</a>
+      <a href="https://blog.naver.com/gallerymirar" target="_blank">Blog</a>
+      <a href="https://smartstore.naver.com/gallerymirar" target="_blank">Smartstore</a>
+    </div>
+  </div>
+  <div class="footer-copy">© 2020 Gallery Mirar. All rights reserved.</div>
+</footer>
+
+<script>
+  const hamburger = document.getElementById('hamburger');
+  const navLinks = document.getElementById('navLinks');
+  hamburger.addEventListener('click', () => navLinks.classList.toggle('open'));
+
+  const thumbs = Array.from(document.querySelectorAll('.work-thumb'));
+  const lightbox = document.getElementById('lightbox');
+  const lbClose = document.getElementById('lbClose');
+  const lbImgWrap = document.getElementById('lbImgWrap');
+  const lbTitle = document.getElementById('lbTitle');
+  const lbMeta = document.getElementById('lbMeta');
+  const lbPrev = document.getElementById('lbPrev');
+  const lbNext = document.getElementById('lbNext');
+  let current = 0;
+
+  function openLightbox(index) {
+    current = index; renderLightbox();
+    lightbox.classList.add('active');
+    document.body.style.overflow = 'hidden';
+    lightbox.scrollTop = 0;
+  }
+
+  function closeLightbox() {
+    lightbox.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+  function renderLightbox() {
+    const thumb = thumbs[current];
+    lbImgWrap.innerHTML = '';
+    if (thumb.dataset.src) {
+      const img = document.createElement('img');
+      img.src = thumb.dataset.src; img.alt = thumb.dataset.title;
+      lbImgWrap.appendChild(img);
+    }
+    lbTitle.textContent = thumb.dataset.title || '';
+    const parts = [];
+    if (thumb.dataset.year) parts.push(thumb.dataset.year);
+    if (thumb.dataset.material) parts.push(thumb.dataset.material);
+    if (thumb.dataset.size) parts.push(thumb.dataset.size);
+    lbMeta.textContent = parts.join('  ·  ');
+    lbPrev.disabled = current === 0;
+    lbNext.disabled = current === thumbs.length - 1;
+    lightbox.scrollTop = 0;
+  }
+
+  thumbs.forEach((thumb, i) => {
+    const infoTitle = thumb.querySelector('.work-thumb-title');
+    const infoMeta = thumb.querySelector('.work-thumb-meta');
+    if (infoTitle) infoTitle.textContent = thumb.dataset.title || '';
+    if (infoMeta) {
+      const parts = [];
+      if (thumb.dataset.year) parts.push(thumb.dataset.year);
+      if (thumb.dataset.material) parts.push(thumb.dataset.material);
+      if (thumb.dataset.size) parts.push(thumb.dataset.size);
+      infoMeta.textContent = parts.join('  ·  ');
+    }
+    thumb.addEventListener('click', () => openLightbox(i));
+  });
+
+  lbClose.addEventListener('click', closeLightbox);
+  lbPrev.addEventListener('click', () => { if (current > 0) { current--; renderLightbox(); } });
+  lbNext.addEventListener('click', () => { if (current < thumbs.length - 1) { current++; renderLightbox(); } });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowLeft' && lightbox.classList.contains('active')) { if (current > 0) { current--; renderLightbox(); } }
+    if (e.key === 'ArrowRight' && lightbox.classList.contains('active')) { if (current < thumbs.length - 1) { current++; renderLightbox(); } }
+  });
+</script>
+</body>
+</html>
