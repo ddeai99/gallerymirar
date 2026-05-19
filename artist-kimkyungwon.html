@@ -50,8 +50,21 @@
     }
     .work-thumb img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; display: block; }
     .work-thumb:hover img { transform: scale(1.04); }
-    .work-thumb-overlay { position: absolute; inset: 0; background: rgba(30,29,27,0); transition: background 0.3s; }
-    .work-thumb:hover .work-thumb-overlay { background: rgba(30,29,27,0.06); }
+    .work-thumb-overlay {
+      position: absolute; inset: 0;
+      background: rgba(30,29,27,0);
+      transition: background 0.4s;
+      display: flex; flex-direction: column; justify-content: flex-end;
+      padding: 1.2rem;
+    }
+    .work-thumb:hover .work-thumb-overlay { background: rgba(30,29,27,0.55); }
+    .work-thumb-info {
+      opacity: 0; transform: translateY(6px);
+      transition: opacity 0.3s, transform 0.3s;
+    }
+    .work-thumb:hover .work-thumb-info { opacity: 1; transform: translateY(0); }
+    .work-thumb-title { font-family: var(--sans-logo); font-size: 13px; font-weight: 300; color: #fff; letter-spacing: 0.06em; margin-bottom: 0.3rem; }
+    .work-thumb-meta { font-size: 10px; letter-spacing: 0.12em; color: rgba(255,255,255,0.65); line-height: 1.8; }
 
     .lightbox { display: none; position: fixed; inset: 0; z-index: 200; background: rgba(255,255,255,0.97); overflow-y: auto; }
     .lightbox.active { display: flex; flex-direction: column; }
@@ -158,7 +171,7 @@
         data-material="acrylic on canvas"
         data-size="91 × 116.8 cm">
         <img src="artist-kimkyungwon-gyerimSansu.jpg" alt="계림산수">
-        <div class="work-thumb-overlay"></div>
+        <div class="work-thumb-overlay"><div class="work-thumb-info"><div class="work-thumb-title">TITLE</div><div class="work-thumb-meta">META</div></div></div>
       </div>
 
       <div class="work-thumb"
@@ -168,7 +181,7 @@
         data-material="acrylic on canvas"
         data-size="45.5 × 91 cm">
         <img src="artist-kimkyungwon-snowWhite.jpg" alt="Snow-white">
-        <div class="work-thumb-overlay"></div>
+        <div class="work-thumb-overlay"><div class="work-thumb-info"><div class="work-thumb-title">TITLE</div><div class="work-thumb-meta">META</div></div></div>
       </div>
 
       <div class="work-thumb"
@@ -178,7 +191,7 @@
         data-material="acrylic on canvas"
         data-size="45.5 × 45.5 cm">
         <img src="artist-kimkyungwon-summerWaves.jpg" alt="Summer waves">
-        <div class="work-thumb-overlay"></div>
+        <div class="work-thumb-overlay"><div class="work-thumb-info"><div class="work-thumb-title">TITLE</div><div class="work-thumb-meta">META</div></div></div>
       </div>
 
       <div class="work-thumb"
@@ -188,7 +201,7 @@
         data-material="acrylic on canvas"
         data-size="60.6 × 60.6 cm">
         <img src="artist-kimkyungwon-blueNight.jpg" alt="푸른밤을 지나">
-        <div class="work-thumb-overlay"></div>
+        <div class="work-thumb-overlay"><div class="work-thumb-info"><div class="work-thumb-title">TITLE</div><div class="work-thumb-meta">META</div></div></div>
       </div>
 
       <div class="work-thumb"
@@ -198,7 +211,7 @@
         data-material="acrylic on canvas"
         data-size="45.5 × 45.5 cm">
         <img src="artist-kimkyungwon-jowoo1.jpg" alt="조우 — 첫만남">
-        <div class="work-thumb-overlay"></div>
+        <div class="work-thumb-overlay"><div class="work-thumb-info"><div class="work-thumb-title">TITLE</div><div class="work-thumb-meta">META</div></div></div>
       </div>
 
       <div class="work-thumb"
@@ -208,7 +221,7 @@
         data-material="acrylic on canvas"
         data-size="91 × 116.8 cm">
         <img src="artist-kimkyungwon-jowoo2.jpg" alt="조우 — 빛이되어주오">
-        <div class="work-thumb-overlay"></div>
+        <div class="work-thumb-overlay"><div class="work-thumb-info"><div class="work-thumb-title">TITLE</div><div class="work-thumb-meta">META</div></div></div>
       </div>
 
     </div>
@@ -311,6 +324,17 @@
   }
 
   thumbs.forEach((thumb, i) => {
+    // 오버레이 info 자동 채우기
+    const infoTitle = thumb.querySelector('.work-thumb-title');
+    const infoMeta = thumb.querySelector('.work-thumb-meta');
+    if (infoTitle) infoTitle.textContent = thumb.dataset.title || '';
+    if (infoMeta) {
+      const parts = [];
+      if (thumb.dataset.year) parts.push(thumb.dataset.year);
+      if (thumb.dataset.material) parts.push(thumb.dataset.material);
+      if (thumb.dataset.size) parts.push(thumb.dataset.size);
+      infoMeta.textContent = parts.join('  ·  ');
+    }
     thumb.addEventListener('click', () => openLightbox(i));
   });
 
