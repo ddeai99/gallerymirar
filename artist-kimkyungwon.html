@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>김경원 — Gallery Mirar</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --white: #ffffff; --off-white: #f8f7f5; --light: #eeece8;
+      --mid: #c8c4bc; --text-light: #999690; --text: #4a4845; --text-dark: #1e1d1b;
+      --sans-logo: 'DM Sans', sans-serif;
+    }
+    body { font-family: 'DM Sans', sans-serif; background: var(--white); color: var(--text-dark); -webkit-font-smoothing: antialiased; }
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; padding: 1.6rem 3rem; background: rgba(255,255,255,0.95); backdrop-filter: blur(8px); border-bottom: 0.5px solid var(--light); }
+    .logo { font-family: var(--sans-logo); font-weight: 300; font-size: 16px; letter-spacing: 0.22em; color: var(--text-dark); text-decoration: none; }
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+    .nav-links a { font-size: 10px; letter-spacing: 0.2em; color: var(--text); text-decoration: none; transition: color 0.3s; }
+    .nav-links a:hover, .nav-links a.active { color: var(--text-dark); }
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; }
+    .hamburger span { display: block; width: 22px; height: 0.5px; background: var(--text-dark); }
+
+    main { padding-top: 80px; }
+    .back-link { display: block; font-size: 10px; letter-spacing: 0.2em; color: var(--text-light); text-decoration: none; padding: 1.5rem 3rem; border-bottom: 0.5px solid var(--light); transition: color 0.3s; }
+    .back-link:hover { color: var(--text-dark); }
+    .back-link::before { content: '← '; }
+
+    .hero-image { width: 100%; height: 55vh; background: var(--off-white); display: flex; align-items: center; justify-content: center; overflow: hidden; }
+    .hero-image img { width: 100%; height: 100%; object-fit: cover; }
+
+    .artist-header { padding: 3rem 3rem 2.5rem; border-bottom: 0.5px solid var(--light); display: flex; justify-content: space-between; align-items: flex-end; }
+    .artist-name { font-family: var(--sans-logo); font-weight: 300; font-size: clamp(28px, 4vw, 44px); letter-spacing: 0.08em; color: var(--text-dark); }
+    .artist-keyword { font-size: 11px; letter-spacing: 0.2em; color: var(--text-light); }
+
+    .artist-body { padding: 3.5rem 3rem; display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; }
+    .artist-bio p { font-family: var(--sans-logo); font-weight: 300; font-size: 16px; line-height: 2.6; color: var(--text); letter-spacing: 0.04em; }
+    .artist-bio p + p { margin-top: 1.5rem; }
+    .cv-label { font-size: 10px; letter-spacing: 0.22em; color: var(--text-light); margin-bottom: 1rem; }
+    .cv-item { font-size: 13px; color: var(--text); line-height: 2.4; font-weight: 300; border-top: 0.5px solid var(--light); padding: 0.6rem 0; }
+
+    .works-section { padding: 0 3rem 5rem; }
+    .works-label { font-size: 10px; letter-spacing: 0.25em; color: var(--text-light); margin-bottom: 2rem; padding-top: 1rem; border-top: 0.5px solid var(--light); }
+    .works-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+    .work-thumb {
+      cursor: pointer; background: var(--off-white); border: 0.5px solid var(--light);
+      aspect-ratio: 1; overflow: hidden; display: flex; align-items: center; justify-content: center;
+      position: relative;
+    }
+    .work-thumb img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; display: block; }
+    .work-thumb:hover img { transform: scale(1.04); }
+    .work-thumb-overlay { position: absolute; inset: 0; background: rgba(30,29,27,0); transition: background 0.3s; }
+    .work-thumb:hover .work-thumb-overlay { background: rgba(30,29,27,0.06); }
+
+    .lightbox { display: none; position: fixed; inset: 0; z-index: 200; background: rgba(255,255,255,0.97); overflow-y: auto; }
+    .lightbox.active { display: flex; flex-direction: column; }
+    .lightbox-header { position: sticky; top: 0; display: flex; justify-content: flex-end; padding: 1.4rem 2rem; background: rgba(255,255,255,0.97); border-bottom: 0.5px solid var(--light); z-index: 10; }
+    .lightbox-close { background: none; border: none; cursor: pointer; font-size: 10px; letter-spacing: 0.2em; color: var(--text-light); display: flex; align-items: center; gap: 0.5rem; transition: color 0.3s; }
+    .lightbox-close:hover { color: var(--text-dark); }
+    .lightbox-close::before { content: '×'; font-size: 18px; font-weight: 300; }
+    .lightbox-body { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 3rem 2rem 4rem; max-width: 900px; margin: 0 auto; width: 100%; }
+    .lightbox-img-wrap { width: 100%; display: flex; align-items: center; justify-content: center; margin-bottom: 2rem; }
+    .lightbox-img-wrap img { max-width: 100%; max-height: 70vh; object-fit: contain; display: block; }
+    .lightbox-img-placeholder { width: 100%; aspect-ratio: 4/3; max-height: 70vh; background: var(--off-white); border: 0.5px solid var(--light); display: flex; align-items: center; justify-content: center; color: var(--mid); font-size: 11px; letter-spacing: 0.12em; }
+    .lightbox-caption { width: 100%; border-top: 0.5px solid var(--light); padding-top: 1.5rem; }
+    .caption-title { font-family: var(--sans-logo); font-weight: 300; font-size: 20px; letter-spacing: 0.06em; color: var(--text-dark); margin-bottom: 0.6rem; }
+    .caption-meta { font-size: 12px; letter-spacing: 0.14em; color: var(--text-light); line-height: 2.2; }
+    .caption-desc { margin-top: 1rem; font-size: 14px; line-height: 2.2; color: var(--text); font-weight: 300; font-family: var(--sans-logo); }
+    .lightbox-nav { display: flex; justify-content: space-between; width: 100%; margin-top: 2rem; }
+    .nav-btn { background: none; border: none; cursor: pointer; font-size: 10px; letter-spacing: 0.2em; color: var(--text-light); display: flex; align-items: center; gap: 0.5rem; transition: color 0.3s; padding: 0; }
+    .nav-btn:hover { color: var(--text-dark); }
+    .nav-btn.prev::before { content: '←'; font-size: 14px; }
+    .nav-btn.next::after { content: '→'; font-size: 14px; }
+    .nav-btn:disabled { opacity: 0.2; cursor: default; }
+
+    footer { border-top: 0.5px solid var(--light); padding: 1.8rem 3rem 1.4rem; }
+    .footer-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+    .footer-links { display: flex; gap: 2.5rem; }
+    .footer-links a { font-size: 10px; letter-spacing: 0.2em; color: var(--text-light); text-decoration: none; transition: color 0.3s; }
+    .footer-links a:hover { color: var(--text-dark); }
+    .footer-copy { font-size: 10px; letter-spacing: 0.14em; color: var(--text-light); text-align: center; border-top: 0.5px solid var(--light); padding-top: 1rem; }
+
+    @media (max-width: 768px) {
+      nav { padding: 1.4rem 1.5rem; }
+      .nav-links { display: none; }
+      .nav-links.open { display: flex; flex-direction: column; position: fixed; top: 60px; left: 0; right: 0; background: var(--white); padding: 2rem 1.5rem; border-bottom: 0.5px solid var(--light); gap: 1.8rem; z-index: 99; }
+      .hamburger { display: flex; }
+      .back-link { padding: 1.2rem 1.5rem; }
+      .artist-header { flex-direction: column; align-items: flex-start; gap: 0.8rem; padding: 2rem 1.5rem; }
+      .artist-body { grid-template-columns: 1fr; gap: 2.5rem; padding: 2.5rem 1.5rem; }
+      .works-section { padding: 0 1.5rem 3rem; }
+      .works-grid { grid-template-columns: repeat(2, 1fr); }
+      .lightbox-body { padding: 2rem 1.2rem 3rem; }
+      footer { flex-direction: column; gap: 0.8rem; text-align: center; padding: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="logo"><img src="logo-small.png" alt="Gallery Mirar" style="height:42px; width:auto; display:block;"></a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="about.html">ABOUT</a></li>
+    <li><a href="artists.html" class="active">ARTISTS</a></li>
+    <li><a href="exhibition.html">EXHIBITION</a></li>
+    <li><a href="contact.html">CONTACT</a></li>
+  </ul>
+  <button class="hamburger" id="hamburger" aria-label="메뉴"><span></span><span></span><span></span></button>
+</nav>
+
+<main>
+  <a href="artists.html" class="back-link">ARTISTS</a>
+
+  <div class="hero-image">
+    <img src="김경원_조우__빛이되어주오_acrylic_on_canvas_91x116_8cm_2022.jpg" alt="김경원">
+  </div>
+
+  <div class="artist-header">
+    <div class="artist-name">김경원</div>
+    <div class="artist-keyword">반복 · 중첩 · 존재</div>
+  </div>
+
+  <div class="artist-body">
+    <div class="artist-bio">
+      <p>김경원 작가의 작업은 동물을 반복적으로 그려 새로운 형상을 만들어내는 방식에서 출발합니다. 닭이나 호랑이처럼 특징이 뚜렷한 동물들을 점·선·면처럼 활용하여 화면 안에 리듬감과 흐름을 만들어냅니다.</p>
+      <p>작품은 멀리서 보면 하나의 풍경이나 추상적인 형태처럼 보이지만, 가까이 다가가면 수많은 동물 개체들이 중첩되어 형상을 이루고 있음을 발견하게 됩니다. 동일해 보이는 개체들 사이에 숨어 있는 다른 형상은 작가 자신의 감정과 바람을 상징적으로 담고 있습니다.</p>
+      <p>반복적인 노동 과정 속에서 대상과 스스로가 점차 동화되는 감각, 그리고 평범한 존재들의 반복과 중첩을 통해 우리가 지나치기 쉬운 보통의 존재들 속 아름다움과 위안을 이야기합니다.</p>
+    </div>
+    <div>
+      <div class="cv-label">EDUCATION</div>
+      <div class="cv-item">2019  성신여자대학교 일반대학원 서양화과 졸업</div>
+      <div class="cv-item">2006  성신여자대학교 동양화과 졸업</div>
+
+      <div class="cv-label" style="margin-top:2rem;">SOLO EXHIBITIONS</div>
+      <div class="cv-item">2021  Familiar Repeat &lt;익숙한 반복&gt;  춘천문화재단 예술소통공간 곳, 춘천</div>
+      <div class="cv-item">2021  Same, Similar, Different &lt;같은, 유사한, 차이가 나는&gt;  Fill Gallery, 서울</div>
+      <div class="cv-item">2019  Difference of Repetitive &lt;반복의 차이&gt;  아트스페이스 W, 서울</div>
+      <div class="cv-item">2018  Variation of repetition &lt;반복의 변주&gt;  팔레드 서울, 서울</div>
+      <div class="cv-item">2018  Redundancy and Repetition &lt;중복과 반복&gt;  김리아 갤러리, 서울</div>
+      <div class="cv-item">2018  A Repetitive Landscape &lt;반복적 풍경&gt;  갤러리 이즈, 서울</div>
+
+      <div class="cv-label" style="margin-top:2rem;">GROUP EXHIBITIONS</div>
+      <div class="cv-item">2025  Blue Art Fair  부산</div>
+      <div class="cv-item">2024  Blue Art Fair  부산</div>
+      <div class="cv-item">2023  Urban Collectibles 2023  Public house, Bangkok</div>
+      <div class="cv-item">2023  뱅크아트페어  명동롯데호텔, 서울</div>
+      <div class="cv-item">2023  대전 국제 아트쇼  대전컨벤션센터, 대전</div>
+      <div class="cv-item" style="color:var(--text-light);">외 다수</div>
+    </div>
+  </div>
+
+  <div class="works-section">
+    <div class="works-label">WORKS</div>
+    <div class="works-grid">
+
+      <div class="work-thumb"
+        data-src="김경원_계림산수_acrylic_on_canvas_91x116_8cm_2023.jpg"
+        data-title="계림산수"
+        data-year="2023"
+        data-material="acrylic on canvas"
+        data-size="91 × 116.8 cm">
+        <img src="김경원_계림산수_acrylic_on_canvas_91x116_8cm_2023.jpg" alt="계림산수">
+        <div class="work-thumb-overlay"></div>
+      </div>
+
+      <div class="work-thumb"
+        data-src="김경원_Snow-white_acrylic_on_canvas_45_5x91cm_2023.jpg"
+        data-title="Snow-white"
+        data-year="2023"
+        data-material="acrylic on canvas"
+        data-size="45.5 × 91 cm">
+        <img src="김경원_Snow-white_acrylic_on_canvas_45_5x91cm_2023.jpg" alt="Snow-white">
+        <div class="work-thumb-overlay"></div>
+      </div>
+
+      <div class="work-thumb"
+        data-src="Summer_waves_acrylic_on_canvas_45_5x45_5cm_2024.jpg"
+        data-title="Summer waves"
+        data-year="2024"
+        data-material="acrylic on canvas"
+        data-size="45.5 × 45.5 cm">
+        <img src="Summer_waves_acrylic_on_canvas_45_5x45_5cm_2024.jpg" alt="Summer waves">
+        <div class="work-thumb-overlay"></div>
+      </div>
+
+      <div class="work-thumb"
+        data-src="푸른밤을_지나_Acrylic_on_canvas_60_6x60_6cm_2023.jpg"
+        data-title="푸른밤을 지나"
+        data-year="2023"
+        data-material="acrylic on canvas"
+        data-size="60.6 × 60.6 cm">
+        <img src="푸른밤을_지나_Acrylic_on_canvas_60_6x60_6cm_2023.jpg" alt="푸른밤을 지나">
+        <div class="work-thumb-overlay"></div>
+      </div>
+
+      <div class="work-thumb"
+        data-src="김경원_조우__첫만남_acrylic_on_canvas_45_5x45_5cm_2022.jpg"
+        data-title="조우 — 첫만남"
+        data-year="2022"
+        data-material="acrylic on canvas"
+        data-size="45.5 × 45.5 cm">
+        <img src="김경원_조우__첫만남_acrylic_on_canvas_45_5x45_5cm_2022.jpg" alt="조우 — 첫만남">
+        <div class="work-thumb-overlay"></div>
+      </div>
+
+      <div class="work-thumb"
+        data-src="김경원_조우__빛이되어주오_acrylic_on_canvas_91x116_8cm_2022.jpg"
+        data-title="조우 — 빛이되어주오"
+        data-year="2022"
+        data-material="acrylic on canvas"
+        data-size="91 × 116.8 cm">
+        <img src="김경원_조우__빛이되어주오_acrylic_on_canvas_91x116_8cm_2022.jpg" alt="조우 — 빛이되어주오">
+        <div class="work-thumb-overlay"></div>
+      </div>
+
+    </div>
+  </div>
+</main>
+
+<div class="lightbox" id="lightbox">
+  <div class="lightbox-header">
+    <button class="lightbox-close" id="lbClose">CLOSE</button>
+  </div>
+  <div class="lightbox-body">
+    <div class="lightbox-img-wrap" id="lbImgWrap"></div>
+    <div class="lightbox-caption">
+      <div class="caption-title" id="lbTitle"></div>
+      <div class="caption-meta" id="lbMeta"></div>
+      <div class="caption-desc" id="lbDesc"></div>
+    </div>
+    <div class="lightbox-nav">
+      <button class="nav-btn prev" id="lbPrev">PREV</button>
+      <button class="nav-btn next" id="lbNext">NEXT</button>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-top">
+    <div><img src="logo-small.png" alt="Gallery Mirar" style="height:20px; width:auto; opacity:0.4;"></div>
+    <div class="footer-links">
+      <a href="https://instagram.com/gallerymirar" target="_blank">Instagram</a>
+      <a href="https://blog.naver.com/gallerymirar" target="_blank">Blog</a>
+      <a href="https://smartstore.naver.com/gallerymirar" target="_blank">Smartstore</a>
+    </div>
+  </div>
+  <div class="footer-copy">© 2020 Gallery Mirar. All rights reserved.</div>
+</footer>
+
+<script>
+  const hamburger = document.getElementById('hamburger');
+  const navLinks = document.getElementById('navLinks');
+  hamburger.addEventListener('click', () => navLinks.classList.toggle('open'));
+
+  const thumbs = Array.from(document.querySelectorAll('.work-thumb'));
+  const lightbox = document.getElementById('lightbox');
+  const lbClose = document.getElementById('lbClose');
+  const lbImgWrap = document.getElementById('lbImgWrap');
+  const lbTitle = document.getElementById('lbTitle');
+  const lbMeta = document.getElementById('lbMeta');
+  const lbDesc = document.getElementById('lbDesc');
+  const lbPrev = document.getElementById('lbPrev');
+  const lbNext = document.getElementById('lbNext');
+
+  let current = 0;
+
+  function openLightbox(index) {
+    current = index;
+    renderLightbox();
+    lightbox.classList.add('active');
+    document.body.style.overflow = 'hidden';
+    lightbox.scrollTop = 0;
+  }
+
+  function closeLightbox() {
+    lightbox.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+  function renderLightbox() {
+    const thumb = thumbs[current];
+    const src = thumb.dataset.src || '';
+    const title = thumb.dataset.title || '';
+    const year = thumb.dataset.year || '';
+    const material = thumb.dataset.material || '';
+    const size = thumb.dataset.size || '';
+    const desc = thumb.dataset.desc || '';
+
+    lbImgWrap.innerHTML = '';
+    if (src) {
+      const img = document.createElement('img');
+      img.src = src;
+      img.alt = title;
+      lbImgWrap.appendChild(img);
+    } else {
+      const ph = document.createElement('div');
+      ph.className = 'lightbox-img-placeholder';
+      ph.textContent = 'IMAGE';
+      lbImgWrap.appendChild(ph);
+    }
+
+    lbTitle.textContent = title;
+    const metaParts = [];
+    if (year) metaParts.push(year);
+    if (material) metaParts.push(material);
+    if (size) metaParts.push(size);
+    lbMeta.textContent = metaParts.join('  ·  ');
+    lbDesc.textContent = desc;
+    lbDesc.style.display = desc ? 'block' : 'none';
+    lbPrev.disabled = current === 0;
+    lbNext.disabled = current === thumbs.length - 1;
+    lightbox.scrollTop = 0;
+  }
+
+  thumbs.forEach((thumb, i) => {
+    thumb.addEventListener('click', () => openLightbox(i));
+  });
+
+  lbClose.addEventListener('click', closeLightbox);
+  lbPrev.addEventListener('click', () => { if (current > 0) { current--; renderLightbox(); } });
+  lbNext.addEventListener('click', () => { if (current < thumbs.length - 1) { current++; renderLightbox(); } });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowLeft' && lightbox.classList.contains('active')) { if (current > 0) { current--; renderLightbox(); } }
+    if (e.key === 'ArrowRight' && lightbox.classList.contains('active')) { if (current < thumbs.length - 1) { current++; renderLightbox(); } }
+  });
+</script>
+</body>
+</html>
