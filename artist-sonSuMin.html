@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>손수민 — Gallery Mirar</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --white: #ffffff; --off-white: #f8f7f5; --light: #eeece8;
+      --mid: #c8c4bc; --text-light: #999690; --text: #4a4845; --text-dark: #1e1d1b;
+      --sans-logo: 'DM Sans', sans-serif;
+    }
+    body { font-family: 'DM Sans', sans-serif; background: var(--white); color: var(--text-dark); -webkit-font-smoothing: antialiased; }
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; padding: 1.6rem 3rem; background: rgba(255,255,255,0.95); backdrop-filter: blur(8px); border-bottom: 0.5px solid var(--light); }
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+    .nav-links a { font-size: 10px; letter-spacing: 0.2em; color: var(--text); text-decoration: none; transition: color 0.3s; }
+    .nav-links a:hover, .nav-links a.active { color: var(--text-dark); }
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; }
+    .hamburger span { display: block; width: 22px; height: 0.5px; background: var(--text-dark); }
+
+    main { padding-top: 80px; }
+    .back-link { display: block; font-size: 10px; letter-spacing: 0.2em; color: var(--text-light); text-decoration: none; padding: 1.5rem 3rem; border-bottom: 0.5px solid var(--light); transition: color 0.3s; }
+    .back-link:hover { color: var(--text-dark); }
+    .back-link::before { content: '← '; }
+
+    .hero-image { width: 100%; height: 55vh; background: var(--off-white); overflow: hidden; }
+    .hero-image img { width: 100%; height: 100%; object-fit: cover; }
+
+    .artist-header { padding: 3rem 3rem 2.5rem; border-bottom: 0.5px solid var(--light); }
+    .artist-name { font-family: var(--sans-logo); font-weight: 300; font-size: clamp(28px, 4vw, 44px); letter-spacing: 0.08em; color: var(--text-dark); }
+
+    .artist-body { padding: 3.5rem 3rem; display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; }
+    .artist-bio p { font-family: var(--sans-logo); font-weight: 300; font-size: 16px; line-height: 2.6; color: var(--text); letter-spacing: 0.04em; }
+    .artist-bio p + p { margin-top: 1.5rem; }
+    .cv-label { font-size: 10px; letter-spacing: 0.22em; color: var(--text-light); margin-bottom: 1rem; }
+    .cv-item { font-size: 13px; color: var(--text); line-height: 2.4; font-weight: 300; border-top: 0.5px solid var(--light); padding: 0.6rem 0; }
+
+    .works-section { padding: 0 3rem 5rem; }
+    .works-label { font-size: 10px; letter-spacing: 0.25em; color: var(--text-light); margin-bottom: 2rem; padding-top: 1rem; border-top: 0.5px solid var(--light); }
+    .works-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+    .work-thumb { cursor: pointer; background: var(--off-white); border: 0.5px solid var(--light); aspect-ratio: 1; overflow: hidden; display: flex; align-items: center; justify-content: center; position: relative; }
+    .work-thumb img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; display: block; }
+    .work-thumb:hover img { transform: scale(1.04); }
+    .work-thumb-overlay { position: absolute; inset: 0; background: rgba(30,29,27,0); transition: background 0.4s; display: flex; flex-direction: column; justify-content: flex-end; padding: 1.2rem; }
+    .work-thumb:hover .work-thumb-overlay { background: rgba(30,29,27,0.55); }
+    .work-thumb-info { opacity: 0; transform: translateY(6px); transition: opacity 0.3s, transform 0.3s; }
+    .work-thumb:hover .work-thumb-info { opacity: 1; transform: translateY(0); }
+    .work-thumb-title { font-family: var(--sans-logo); font-size: 13px; font-weight: 300; color: #fff; letter-spacing: 0.06em; margin-bottom: 0.3rem; }
+    .work-thumb-meta { font-size: 10px; letter-spacing: 0.12em; color: rgba(255,255,255,0.65); line-height: 1.8; }
+
+    .lightbox { display: none; position: fixed; inset: 0; z-index: 200; background: rgba(255,255,255,0.97); overflow-y: auto; }
+    .lightbox.active { display: flex; flex-direction: column; }
+    .lightbox-header { position: sticky; top: 0; display: flex; justify-content: flex-end; padding: 1.4rem 2rem; background: rgba(255,255,255,0.97); border-bottom: 0.5px solid var(--light); z-index: 10; }
+    .lightbox-close { background: none; border: none; cursor: pointer; font-size: 10px; letter-spacing: 0.2em; color: var(--text-light); display: flex; align-items: center; gap: 0.5rem; transition: color 0.3s; }
+    .lightbox-close:hover { color: var(--text-dark); }
+    .lightbox-close::before { content: '×'; font-size: 18px; font-weight: 300; }
+    .lightbox-body { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 3rem 2rem 4rem; max-width: 900px; margin: 0 auto; width: 100%; }
+    .lightbox-img-wrap { width: 100%; display: flex; align-items: center; justify-content: center; margin-bottom: 2rem; }
+    .lightbox-img-wrap img { max-width: 100%; max-height: 70vh; object-fit: contain; display: block; }
+    .lightbox-caption { width: 100%; border-top: 0.5px solid var(--light); padding-top: 1.5rem; }
+    .caption-title { font-family: var(--sans-logo); font-weight: 300; font-size: 20px; letter-spacing: 0.06em; color: var(--text-dark); margin-bottom: 0.6rem; }
+    .caption-meta { font-size: 12px; letter-spacing: 0.14em; color: var(--text-light); line-height: 2.2; }
+    .lightbox-nav { display: flex; justify-content: space-between; width: 100%; margin-top: 2rem; }
+    .nav-btn { background: none; border: none; cursor: pointer; font-size: 10px; letter-spacing: 0.2em; color: var(--text-light); display: flex; align-items: center; gap: 0.5rem; transition: color 0.3s; padding: 0; }
+    .nav-btn:hover { color: var(--text-dark); }
+    .nav-btn.prev::before { content: '←'; font-size: 14px; }
+    .nav-btn.next::after { content: '→'; font-size: 14px; }
+    .nav-btn:disabled { opacity: 0.2; cursor: default; }
+
+    footer { border-top: 0.5px solid var(--light); padding: 1.8rem 3rem 1.4rem; }
+    .footer-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+    .footer-links { display: flex; gap: 2.5rem; }
+    .footer-links a { font-size: 10px; letter-spacing: 0.2em; color: var(--text-light); text-decoration: none; transition: color 0.3s; }
+    .footer-links a:hover { color: var(--text-dark); }
+    .footer-copy { font-size: 10px; letter-spacing: 0.14em; color: var(--text-light); text-align: center; border-top: 0.5px solid var(--light); padding-top: 1rem; }
+
+    @media (max-width: 768px) {
+      nav { padding: 1.4rem 1.5rem; }
+      .nav-links { display: none; }
+      .nav-links.open { display: flex; flex-direction: column; position: fixed; top: 60px; left: 0; right: 0; background: var(--white); padding: 2rem 1.5rem; border-bottom: 0.5px solid var(--light); gap: 1.8rem; z-index: 99; }
+      .hamburger { display: flex; }
+      .back-link { padding: 1.2rem 1.5rem; }
+      .artist-header { padding: 2rem 1.5rem; }
+      .artist-body { grid-template-columns: 1fr; gap: 2.5rem; padding: 2.5rem 1.5rem; }
+      .works-section { padding: 0 1.5rem 3rem; }
+      .works-grid { grid-template-columns: repeat(2, 1fr); }
+      .lightbox-body { padding: 2rem 1.2rem 3rem; }
+      footer { flex-direction: column; gap: 0.8rem; text-align: center; padding: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+<nav>
+  <a href="index.html"><img src="logo-small.png" alt="Gallery Mirar" style="height:42px; width:auto; display:block;"></a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="about.html">ABOUT</a></li>
+    <li><a href="artists.html" class="active">ARTISTS</a></li>
+    <li><a href="exhibition.html">EXHIBITION</a></li>
+    <li><a href="contact.html">CONTACT</a></li>
+  </ul>
+  <button class="hamburger" id="hamburger" aria-label="메뉴"><span></span><span></span><span></span></button>
+</nav>
+
+<main>
+  <a href="artists.html" class="back-link">ARTISTS</a>
+
+  <div class="hero-image">
+    <img src="artist-sonSuMin-catharsis-solution.jpg" alt="손수민">
+  </div>
+
+  <div class="artist-header">
+    <div class="artist-name">손수민</div>
+  </div>
+
+  <div class="artist-body">
+    <div class="artist-bio">
+      <p>텍스트를 이미지로 환원시키는 동시에, 이미지를 다시 의미의 장(場)으로 확장하는 회화적 실험입니다. 캔버스를 가득 채운 원색의 레이어는 중첩된 언어 구조로 구성되어 있습니다.</p>
+      <p>직선적 타이포그래피는 질서와 체계, 사회적 코드를 상징하며, 그 위를 가로지르는 유기적 곡선의 필획은 구조화된 언어 체계에 균열을 내는 몸의 제스처입니다. 직선과 곡선, 인쇄적 문자와 수기적 필선, 반복과 단일성의 대비는 화면 안에서 긴장을 형성합니다.</p>
+      <p>텍스트는 더 이상 읽히기 위한 문장이 아니라, 밀도와 리듬을 가진 물질적 구조로 존재합니다. 그리고 그 위에 쓰인 하나의 단어는 의미 이전에 에너지로 작동합니다.</p>
+    </div>
+    <div>
+      <div class="cv-label">SOLO EXHIBITIONS</div>
+      <div class="cv-item">2025  THE GREATEST LETTERS  포스코이앤씨 더샵갤러리, 서울</div>
+      <div class="cv-item">2023  RÊVEATHARSIS  리빗한남, 서울</div>
+      <div class="cv-item">2023  CATHARSIS  J갤러리, 천안</div>
+      <div class="cv-item">2023  CATHARSIS  나비갤러리, 김해</div>
+      <div class="cv-item">2022  CATHARSIS  더트리니티 갤러리, 서울</div>
+      <div class="cv-item">2021  THE GREAT LEGACY  올미아트스페이스, 서울</div>
+      <div class="cv-item">2019  THE Sounds of Silence  BOM갤러리, 보스턴</div>
+      <div class="cv-item">2019  THE PAINTER  더트리니티 갤러리, 서울</div>
+      <div class="cv-item">2017  BOM갤러리 초대전  BOM갤러리, 보스턴</div>
+      <div class="cv-item">2016  A.STYLE갤러리 초대전  홍콩</div>
+      <div class="cv-item" style="color:var(--text-light);">외 다수 (총 18회)</div>
+
+      <div class="cv-label" style="margin-top:2rem;">ART FAIRS</div>
+      <div class="cv-item">2026  핑크아트페어  JW메리어트호텔, 서울</div>
+      <div class="cv-item">2026  BAMA  BEXCO, 부산</div>
+      <div class="cv-item">2025  ART ASIA DELHI  인도</div>
+      <div class="cv-item">2025  국제블루아트페어  파라다이스호텔, 부산</div>
+      <div class="cv-item">2024  아트부산  BEXCO, 부산</div>
+      <div class="cv-item">2019  ART MARKET HAMPTONS  뉴욕</div>
+      <div class="cv-item">2017  Affordable Art Fair  홍콩</div>
+      <div class="cv-item" style="color:var(--text-light);">외 다수</div>
+    </div>
+  </div>
+
+  <div class="works-section">
+    <div class="works-label">WORKS</div>
+    <div class="works-grid">
+
+      <div class="work-thumb"
+        data-src="artist-sonSuMin-catharsis-solution.jpg"
+        data-title="Catharsis — Solution"
+        data-year="2025"
+        data-material="Oil on canvas"
+        data-size="162.2 × 130.3 cm">
+        <img src="artist-sonSuMin-catharsis-solution.jpg" alt="Catharsis — Solution">
+        <div class="work-thumb-overlay"><div class="work-thumb-info"><div class="work-thumb-title"></div><div class="work-thumb-meta"></div></div></div>
+      </div>
+
+      <div class="work-thumb"
+        data-src="artist-sonSuMin-catharsis-home.jpg"
+        data-title="Catharsis — Home"
+        data-year="2025"
+        data-material="Oil on canvas"
+        data-size="116.7 × 91 cm">
+        <img src="artist-sonSuMin-catharsis-home.jpg" alt="Catharsis — Home">
+        <div class="work-thumb-overlay"><div class="work-thumb-info"><div class="work-thumb-title"></div><div class="work-thumb-meta"></div></div></div>
+      </div>
+
+      <div class="work-thumb"
+        data-src="artist-sonSuMin-catharsis-free.jpg"
+        data-title="Catharsis — Free"
+        data-year="2025"
+        data-material="Oil on canvas"
+        data-size="60.6 × 60.6 cm">
+        <img src="artist-sonSuMin-catharsis-free.jpg" alt="Catharsis — Free">
+        <div class="work-thumb-overlay"><div class="work-thumb-info"><div class="work-thumb-title"></div><div class="work-thumb-meta"></div></div></div>
+      </div>
+
+      <div class="work-thumb"
+        data-src="artist-sonSuMin-catharsis-hope.jpg"
+        data-title="Catharsis — Hope"
+        data-year="2025"
+        data-material="Oil on canvas"
+        data-size="60.6 × 60.6 cm">
+        <img src="artist-sonSuMin-catharsis-hope.jpg" alt="Catharsis — Hope">
+        <div class="work-thumb-overlay"><div class="work-thumb-info"><div class="work-thumb-title"></div><div class="work-thumb-meta"></div></div></div>
+      </div>
+
+      <div class="work-thumb"
+        data-src="artist-sonSuMin-catharsis-love-red.jpg"
+        data-title="Catharsis — Love"
+        data-year="2024"
+        data-material="Oil on canvas, mixed media"
+        data-size="72.7 × 60.6 cm">
+        <img src="artist-sonSuMin-catharsis-love-red.jpg" alt="Catharsis — Love">
+        <div class="work-thumb-overlay"><div class="work-thumb-info"><div class="work-thumb-title"></div><div class="work-thumb-meta"></div></div></div>
+      </div>
+
+      <div class="work-thumb"
+        data-src="artist-sonSuMin-catharsis-love-blue.jpg"
+        data-title="Catharsis — Love"
+        data-year="2024"
+        data-material="Oil on canvas, mixed media"
+        data-size="72.7 × 60.6 cm">
+        <img src="artist-sonSuMin-catharsis-love-blue.jpg" alt="Catharsis — Love">
+        <div class="work-thumb-overlay"><div class="work-thumb-info"><div class="work-thumb-title"></div><div class="work-thumb-meta"></div></div></div>
+      </div>
+
+      <div class="work-thumb"
+        data-src="artist-sonSuMin-catharsis-love-purple.jpg"
+        data-title="Catharsis — Love"
+        data-year="2024"
+        data-material="Oil on canvas, mixed media, Resin"
+        data-size="53 × 45.5 cm">
+        <img src="artist-sonSuMin-catharsis-love-purple.jpg" alt="Catharsis — Love">
+        <div class="work-thumb-overlay"><div class="work-thumb-info"><div class="work-thumb-title"></div><div class="work-thumb-meta"></div></div></div>
+      </div>
+
+      <div class="work-thumb"
+        data-src="artist-sonSuMin-catharsis-life.jpg"
+        data-title="Catharsis — Life"
+        data-year="2024"
+        data-material="Oil on canvas, mixed media, Resin"
+        data-size="53 × 45.5 cm">
+        <img src="artist-sonSuMin-catharsis-life.jpg" alt="Catharsis — Life">
+        <div class="work-thumb-overlay"><div class="work-thumb-info"><div class="work-thumb-title"></div><div class="work-thumb-meta"></div></div></div>
+      </div>
+
+      <div class="work-thumb"
+        data-src="artist-sonSuMin-catharsis-2022.jpg"
+        data-title="Catharsis"
+        data-year="2022"
+        data-material="Oil on canvas"
+        data-size="90.9 × 72.7 cm">
+        <img src="artist-sonSuMin-catharsis-2022.jpg" alt="Catharsis">
+        <div class="work-thumb-overlay"><div class="work-thumb-info"><div class="work-thumb-title"></div><div class="work-thumb-meta"></div></div></div>
+      </div>
+
+    </div>
+  </div>
+</main>
+
+<div class="lightbox" id="lightbox">
+  <div class="lightbox-header">
+    <button class="lightbox-close" id="lbClose">CLOSE</button>
+  </div>
+  <div class="lightbox-body">
+    <div class="lightbox-img-wrap" id="lbImgWrap"></div>
+    <div class="lightbox-caption">
+      <div class="caption-title" id="lbTitle"></div>
+      <div class="caption-meta" id="lbMeta"></div>
+    </div>
+    <div class="lightbox-nav">
+      <button class="nav-btn prev" id="lbPrev">PREV</button>
+      <button class="nav-btn next" id="lbNext">NEXT</button>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-top">
+    <div><img src="logo-small.png" alt="Gallery Mirar" style="height:20px; width:auto; opacity:0.4;"></div>
+    <div class="footer-links">
+      <a href="https://instagram.com/gallerymirar" target="_blank">Instagram</a>
+      <a href="https://blog.naver.com/gallerymirar" target="_blank">Blog</a>
+      <a href="https://smartstore.naver.com/gallerymirar" target="_blank">Smartstore</a>
+    </div>
+  </div>
+  <div class="footer-copy">© 2020 Gallery Mirar. All rights reserved.</div>
+</footer>
+
+<script>
+  const hamburger = document.getElementById('hamburger');
+  const navLinks = document.getElementById('navLinks');
+  hamburger.addEventListener('click', () => navLinks.classList.toggle('open'));
+
+  const thumbs = Array.from(document.querySelectorAll('.work-thumb'));
+  const lightbox = document.getElementById('lightbox');
+  const lbClose = document.getElementById('lbClose');
+  const lbImgWrap = document.getElementById('lbImgWrap');
+  const lbTitle = document.getElementById('lbTitle');
+  const lbMeta = document.getElementById('lbMeta');
+  const lbPrev = document.getElementById('lbPrev');
+  const lbNext = document.getElementById('lbNext');
+  let current = 0;
+
+  function openLightbox(index) {
+    current = index; renderLightbox();
+    lightbox.classList.add('active');
+    document.body.style.overflow = 'hidden';
+    lightbox.scrollTop = 0;
+  }
+
+  function closeLightbox() {
+    lightbox.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+  function renderLightbox() {
+    const thumb = thumbs[current];
+    lbImgWrap.innerHTML = '';
+    if (thumb.dataset.src) {
+      const img = document.createElement('img');
+      img.src = thumb.dataset.src; img.alt = thumb.dataset.title;
+      lbImgWrap.appendChild(img);
+    }
+    lbTitle.textContent = thumb.dataset.title || '';
+    const parts = [];
+    if (thumb.dataset.year) parts.push(thumb.dataset.year);
+    if (thumb.dataset.material) parts.push(thumb.dataset.material);
+    if (thumb.dataset.size) parts.push(thumb.dataset.size);
+    lbMeta.textContent = parts.join('  ·  ');
+    lbPrev.disabled = current === 0;
+    lbNext.disabled = current === thumbs.length - 1;
+    lightbox.scrollTop = 0;
+  }
+
+  thumbs.forEach((thumb, i) => {
+    const infoTitle = thumb.querySelector('.work-thumb-title');
+    const infoMeta = thumb.querySelector('.work-thumb-meta');
+    if (infoTitle) infoTitle.textContent = thumb.dataset.title || '';
+    if (infoMeta) {
+      const parts = [];
+      if (thumb.dataset.year) parts.push(thumb.dataset.year);
+      if (thumb.dataset.material) parts.push(thumb.dataset.material);
+      if (thumb.dataset.size) parts.push(thumb.dataset.size);
+      infoMeta.textContent = parts.join('  ·  ');
+    }
+    thumb.addEventListener('click', () => openLightbox(i));
+  });
+
+  lbClose.addEventListener('click', closeLightbox);
+  lbPrev.addEventListener('click', () => { if (current > 0) { current--; renderLightbox(); } });
+  lbNext.addEventListener('click', () => { if (current < thumbs.length - 1) { current++; renderLightbox(); } });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowLeft' && lightbox.classList.contains('active')) { if (current > 0) { current--; renderLightbox(); } }
+    if (e.key === 'ArrowRight' && lightbox.classList.contains('active')) { if (current < thumbs.length - 1) { current++; renderLightbox(); } }
+  });
+</script>
+</body>
+</html>
